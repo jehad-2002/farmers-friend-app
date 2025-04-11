@@ -1,0 +1,424 @@
+{
+  "@@locale": "en",
+  "appTitle": "Farmers Friend App",
+  "login": "Login",
+  "register": "Register",
+  "username": "Username",
+  "password": "Password",
+  "fullName": "Full Name",
+  "phoneNumber": "Phone Number",
+  "address": "Address",
+  "dateOfBirth": "Date of Birth",
+  "selectDateOfBirth": "Select Date of Birth",
+  "accountType": "Account Type",
+  "farmer": "Farmer",
+  "trader": "Trader",
+  "admin": "Admin",
+  "agriculturalGuide": "Agricultural Guide",
+  "dontHaveAccount": "Don't have an account? Sign up",
+  "alreadyHaveAccount": "Already have an account? Login",
+  "userProfile": "User Profile",
+  "saveChanges": "Save Changes",
+  "logout": "Logout",
+  "categories": "Categories",
+  "addCategory": "Add Category",
+  "editCategory": "Edit Category",
+  "enterCityPrompt": "Enter a city name to get the current weather.",
+  "categoryName": "Category Name",
+  "category": "Category",
+  "description": "Description",
+  "noCategoriesFound": "No categories found.",
+  "confirmDelete": "Confirm Delete",
+  "deleteCategoryConfirmation": "Are you sure you want to delete the category \"{categoryName}\"?",
+  "@deleteCategoryConfirmation": {
+    "placeholders": {
+      "categoryName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "categorySavedSuccessfully": "Category saved successfully!",
+  "categoryDeletedSuccessfully": "Category deleted successfully!",
+  "crops": "Crops",
+  "addCrop": "Add Crop",
+  "editCrop": "Edit Crop",
+  "cropName": "Crop Name",
+  "noCropsFound": "No crops found.",
+  "deleteCropConfirmation": "Are you sure you want to delete the crop \"{cropName}\"?",
+   "@deleteCropConfirmation": {
+    "placeholders": {
+      "cropName": {
+        "type": "String"
+      }
+    }
+  },
+  "filterByCategory": "Filter by Category",
+  "allCategories": "All Categories",
+  "cropSavedSuccessfully": "Crop saved successfully!",
+  "cropDeletedSuccessfully": "Crop deleted successfully!",
+  "errorLoadingCategories": "Error loading categories",
+  "loadingCategories": "Loading categories...",
+  "pleaseSelectCategory": "Please select a category",
+  "products": "Products",
+  "myProducts": "My Products",
+  "addProduct": "Add Product",
+  "editProduct": "Edit Product",
+  "productTitle": "Product Title",
+  "price": "Price",
+  "crop": "Crop",
+  "noProductsFound": "No products found.",
+  "noOwnProductsFound": "You haven't added any products yet.",
+  "noMatchingProductsFound": "No products found matching your criteria.",
+  "productSavedSuccessfully": "Product saved successfully!",
+  "productDeletedSuccessfully": "Product deleted successfully!",
+  "errorLoadingCrops": "Error loading crops",
+  "loadingCrops": "Loading crops...",
+  "noCropsAvailable": "No crops available to select",
+  "noCropsInCategoryFound": "No crops found in this category.",
+  "searchProducts": "Search Products...",
+  "productDetails": "Product Details",
+  "evaluations": "Evaluations",
+  "noEvaluationsYet": "No evaluations yet.",
+  "addYourEvaluation": "Add your evaluation",
+  "writeYourComment": "Write your comment...",
+  "submitEvaluation": "Submit Evaluation",
+  "pleaseLoginToAddEvaluation": "Please login to add an evaluation!",
+  "deleteProductConfirmation": "Are you sure you want to delete the product \"{productTitle}\"?",
+   "@deleteProductConfirmation": {
+    "placeholders": {
+      "productTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "noImagesAvailable": "No images available",
+  "profileUpdated": "Profile updated!",
+  "guidelines": "Guidelines",
+  "addGuideline": "Add Guideline",
+  "editGuideline": "Edit Guideline",
+  "guidelineTitle": "Guideline Title",
+  "guidanceText": "Guidance Text",
+  "noGuidelinesFound": "No guidelines found.",
+  "noMatchingGuidelinesFound": "No matching guidelines found.",
+  "deleteGuidelineConfirmation": "Are you sure you want to delete the guideline \"{guidelineTitle}\"?",
+   "@deleteGuidelineConfirmation": {
+    "placeholders": {
+      "guidelineTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "guidelineSavedSuccessfully": "Guideline saved successfully!",
+  "guidelineDeletedSuccessfully": "Guideline deleted successfully!",
+  "filterByCrop": "Filter by Crop",
+  "allCrops": "All Crops",
+  "guidelineDetails": "Guideline Details",
+  "searchGuidelines": "Search Guidelines...",
+  "relevantCrop": "Relevant Crop",
+  "validation": "Validation",
+  "pleaseEnterName": "Please enter your name",
+  "nameTooShort": "Name must be at least 2 characters",
+  "pleaseEnterUsername": "Please enter your username",
+  "usernameTooShort": "Username must be at least 4 characters",
+  "pleaseEnterPassword": "Please enter your password",
+  "passwordTooShort": "Password must be at least 6 characters",
+  "pleaseEnterPhoneNumber": "Please enter your phone number",
+  "invalidPhoneNumber": "Invalid phone number format",
+  "pleaseEnterPrice": "Please enter the price",
+  "priceMustBePositive": "Price must be positive",
+  "invalidPriceFormat": "Invalid price format",
+  "pleaseEnterField": "Please enter {fieldName}",
+  "@pleaseEnterField": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String",
+        "example": "the title"
+      }
+    }
+  },
+  "pleaseEnterTitle": "Please enter a title",
+  "pleaseEnterCategoryName": "Please enter a category name",
+  "pleaseEnterCropName": "Please enter a crop name",
+  "pleaseEnterGuidelineTitle": "Please enter a guideline title",
+  "pleaseEnterGuidanceText": "Please enter the guidance text",
+  "pleaseEnterAddress": "Please enter your address",
+  "pleaseEnterValidNumber": "Please enter a valid number",
+  "mustBeNonNegative": "{fieldName} must be a non-negative integer",
+  "@mustBeNonNegative": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      }
+    }
+  },
+  "invalidFormat": "Invalid {fieldName} format",
+  "@invalidFormat": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      }
+    }
+  },
+  "general": "General",
+  "ok": "OK",
+  "close": "Close",
+  "clear": "Clear",
+  "loading": "Loading...",
+  "saving": "Saving...",
+  "errorOccurred": "An Error Occurred",
+  "manageCategories": "Manage Categories",
+  "manageCrops": "Manage Crops",
+  "manageProducts": "Manage Products",
+  "manageGuidelines": "Manage Guidelines",
+  "guestUser": "Guest",
+  "visitor": "Visitor",
+  "weather": "Weather",
+  "currentWeather": "Current Weather",
+  "feelsLike": "Feels like",
+  "humidity": "Humidity",
+  "wind": "Wind",
+  "forecast": "Forecast",
+  "max": "Max",
+  "min": "Min",
+  "noData": "No data available.",
+  "noWeatherData": "No weather data available. Enter a city name to search.",
+  "error": "Error",
+  "chooseLanguage": "Choose your language",
+  "changeLanguage": "Change Language",
+  "errorMessages": "Error Messages",
+  "databaseError": "A database error occurred: {error}",
+  "@databaseError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authenticationError": "Authentication failed: {error}",
+  "@authenticationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cacheError": "Cache error: {error}",
+  "@cacheError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "productNotFound": "Product not found: {error}",
+  "@productNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryNotFound": "Category not found: {error}",
+  "@categoryNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cropNotFound": "Crop not found: {error}",
+  "@cropNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "guidelineNotFound": "Guideline not found: {error}",
+  "@guidelineNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "imageUploadError": "Image upload failed: {error}",
+  "@imageUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "networkError": "Network error. Please check your connection: {error}",
+  "@networkError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "unexpectedError": "An unexpected error occurred: {error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingData": "Error loading data",
+  "errorSavingProduct": "Error saving product",
+  "city": "City",
+  "retry": "Retry",
+  "search": "Search...",
+  "sortAndFilter": "Sort & Filter",
+  "sortNewestFirst": "Sort: Newest First",
+  "sortOldestFirst": "Sort: Oldest First",
+  "filter": "Filter",
+  "noFilter": "No Filter / Default Sort",
+  "sortByDate": "Sort by Date",
+  "selectCrop": "Select Crop",
+  "pleaseSelectCrop": "Please select a crop",
+  "pleaseSelectAccountType": "Please select an account type",
+  "imagePickerError": "Could not pick image.",
+  "imageDeletionError": "Error deleting image.",
+  "imageUploadFailedWarning": "Warning: Failed to upload some images.",
+  "userNotLoggedIn": "Please log in to continue.",
+  "pleaseAddOneImage": "Please add at least one image.",
+  "addImage": "Add Image",
+  "unknown": "Unknown",
+  "notAvailable": "N/A",
+  "invalidDate": "Invalid Date",
+  "active": "Active",
+  "inactive": "Inactive",
+  "userId": "User ID",
+  "accountStatus": "Account Status",
+  "memberSince": "Member Since",
+  "lastUpdated": "Last Updated",
+  "nameNotAvailable": "Name not provided",
+  "edit": "Edit",
+  "other": "Other",
+  "cannotCall": "Cannot launch phone call",
+  "currency": "YER",
+  "noDescriptionAvailable": "No description available. This product is considered one of the best available.",
+  "organicProduct": "100% Organic Product",
+  "sellerInfo": "Seller Information",
+  "orderNow": "Order Now",
+  "additionalInfo": "Additional Information",
+  "certifiedSeller": "Certified Seller",
+  "farmerReviews": "Farmer Reviews",
+  "readMore": "Read More...",
+  "contact": "Contact",
+  "home": "Home",
+  "chooseFromGallery": "Choose from Gallery",
+  "takePhoto": "Take Photo",
+  "profile": "Profile",
+
+  "plantDiagnosis": "Plant Diagnosis",
+  "selectImageForDiagnosis": "Select an image for plant diagnosis",
+  "chooseImage": "Choose Image",
+  "startDiagnosis": "Start Diagnosis",
+  "diagnoseAnotherImage": "Diagnose Another Image",
+  "diagnosisResult": "Diagnosis Result:",
+  "errorPickingImage": "Failed to pick image",
+  "errorLoadingImage": "Failed to load image",
+  "errorProcessingImage": "Error processing image",
+  "modelInferenceError": "Model Error: {details}",
+  "@modelInferenceError": {
+    "placeholders": {
+      "details": {
+         "type": "String"
+      }
+    }
+  },
+   "imageProcessingError": "Image Error: {details}",
+   "@imageProcessingError": {
+     "placeholders": {
+       "details": {
+          "type": "String"
+       }
+     }
+   },
+  "noImageSelectedYet": "Please select an image first.",
+  "readyToDiagnose": "Image selected. Ready to diagnose.",
+    "manageUsers": "Manage Users",
+    "searchUsers": "Search by name, username, phone...",
+    "refresh": "Refresh",
+    "noUsersFound": "No users found in the system.",
+    "noMatchingUsersFound": "No users found matching your search.",
+    "changeStatusFor": "Change Status for {name}",
+    "@changeStatusFor": {
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "John Doe"
+        }
+      }
+    },
+    "changeAccountTypeFor": "Change Account Type for {name}",
+    "@changeAccountTypeFor": {
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "Jane Smith"
+        }
+      }
+    },
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "userStatusUpdated": "User '{name}' status updated.",
+    "@userStatusUpdated": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userTypeUpdated": "User '{name}' type updated.",
+    "@userTypeUpdated": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userUpdateFailed": "Failed to update user '{name}'.",
+    "@userUpdateFailed": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "deleteUserConfirmation": "Delete user '{name}'? This action cannot be undone.",
+    "@deleteUserConfirmation": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userDeleted": "User '{name}' deleted.",
+    "@userDeleted": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userDeletionFailed": "Failed to delete user '{name}'.",
+    "@userDeletionFailed": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "actions": "Actions",
+    "confirmLogout": "Are you sure you want to log out?",
+    "publicationDate": "Publication Date",
+    "publicationDateDescription": "Label for publication date"
+   
+}

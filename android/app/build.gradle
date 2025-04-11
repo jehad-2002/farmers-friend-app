@@ -1,0 +1,73 @@
+buildscript {
+    ext.kotlin_version = '1.8.22'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+// إضافة استراتيجيّة حل التبعيات لإجبار Gradle على استخدام الإصدار 2.11.0
+configurations.all {
+    resolutionStrategy {
+        force 'org.tensorflow:tensorflow-lite-gpu-api:2.11.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'dev.flutter.flutter-gradle-plugin'
+
+android {
+    namespace "com.example.farmersfriendapp"
+    compileSdkVersion flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    defaultConfig {
+        applicationId "com.example.farmersfriendapp"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutter.versionCode
+        versionName flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            // تعطيل تقليص الكود والإصلاح (minification & resource shrinking)
+            minifyEnabled false
+            shrinkResources false
+            // يستخدم حاليًا توقيع debug، قم بتعديل توقيع النسخة عند إعداد التوقيع الخاص بالإصدار
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+    // المستودع الخاص بـ Flutter
+    maven {
+        url 'https://storage.googleapis.com/download.flutter.io'
+    }
+}
+
+dependencies {
+    // إجبار استخدام الإصدار 2.11.0 من tensorflow-lite-gpu-api لجميع التبعيات
+    implementation "org.tensorflow:tensorflow-lite-gpu-api:2.11.0"
+}
+
+flutter {
+    source "../.."
+}

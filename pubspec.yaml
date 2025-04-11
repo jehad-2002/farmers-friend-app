@@ -1,0 +1,58 @@
+name: farmersfriendapp
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0' # It is better to use this.
+
+dependencies:
+  animate_do: ^4.2.0
+  cached_network_image: ^3.4.1
+  carousel_slider: ^5.0.0
+  crypto: ^3.0.3
+  cupertino_icons: ^1.0.8
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_localization: null
+  flutter_rating_bar: ^4.0.1
+  get_it: ^8.0.3
+  google_fonts: ^6.2.1
+  http: ^1.3.0
+  hydrated_bloc: ^10.0.0
+  image: ^4.5.4
+  image_picker: ^1.0.7
+  intl: ^0.19.0
+  path: ^1.9.0
+  path_provider: ^2.1.2
+  photo_view: ^0.15.0
+  pinenacl: ^0.6.0
+  share_plus: ^10.1.4
+  shared_preferences: ^2.2.2
+  shimmer: ^3.0.0
+  smooth_page_indicator: ^1.2.1
+  sqflite: ^2.3.2
+  tflite_flutter: ^0.11.0
+  timeago: ^3.7.0
+  url_launcher: ^6.3.1
+
+dev_dependencies:
+  flutter_lints: ^5.0.0 # Updated to a more recent version
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  generate: true # Correct.  Keep this.
+  assets:
+    - assets/images/
+    - assets/images/crops/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"

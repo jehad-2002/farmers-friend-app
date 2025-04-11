@@ -1,0 +1,424 @@
+{
+  "@@locale": "ar",
+  "appTitle": "تطبيق صديق المزارعين",
+  "login": "تسجيل الدخول",
+  "register": "إنشاء حساب",
+  "username": "اسم المستخدم",
+  "password": "كلمة المرور",
+  "fullName": "الاسم الكامل",
+  "phoneNumber": "رقم الهاتف",
+  "address": "العنوان",
+  "dateOfBirth": "تاريخ الميلاد",
+  "selectDateOfBirth": "اختر تاريخ الميلاد",
+  "accountType": "نوع الحساب",
+  "farmer": "مزارع",
+  "trader": "تاجر",
+  "admin": "مدير",
+  "agriculturalGuide": "مرشد زراعي",
+  "dontHaveAccount": "ليس لديك حساب؟ إنشاء حساب",
+  "alreadyHaveAccount": "لديك حساب بالفعل؟ تسجيل الدخول",
+  "userProfile": "الملف الشخصي",
+  "saveChanges": "حفظ التغييرات",
+  "logout": "تسجيل الخروج",
+  "categories": "الأصناف",
+  "addCategory": "إضافة صنف",
+  "editCategory": "تعديل الصنف",
+  "enterCityPrompt": "أدخل اسم مدينة للحصول على حالة الطقس.",
+  "categoryName": "اسم الصنف",
+  "category": "الصنف",
+  "description": "الوصف",
+  "noCategoriesFound": "لم يتم العثور على أصناف.",
+  "confirmDelete": "تأكيد الحذف",
+  "deleteCategoryConfirmation": "هل أنت متأكد من رغبتك في حذف الصنف \"{categoryName}\"؟",
+   "@deleteCategoryConfirmation": {
+    "placeholders": {
+      "categoryName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "categorySavedSuccessfully": "تم حفظ الصنف بنجاح!",
+  "categoryDeletedSuccessfully": "تم حذف الصنف بنجاح!",
+  "crops": "المحاصيل",
+  "addCrop": "إضافة محصول",
+  "editCrop": "تعديل المحصول",
+  "cropName": "اسم المحصول",
+  "noCropsFound": "لم يتم العثور على محاصيل.",
+  "deleteCropConfirmation": "هل أنت متأكد من رغبتك في حذف المحصول \"{cropName}\"؟",
+   "@deleteCropConfirmation": {
+    "placeholders": {
+      "cropName": {
+        "type": "String"
+      }
+    }
+  },
+  "filterByCategory": "التصنيف حسب الصنف",
+  "allCategories": "كل الأصناف",
+  "cropSavedSuccessfully": "تم حفظ المحصول بنجاح!",
+  "cropDeletedSuccessfully": "تم حذف المحصول بنجاح!",
+  "errorLoadingCategories": "خطأ في تحميل الأصناف",
+  "loadingCategories": "جارٍ تحميل الأصناف...",
+  "pleaseSelectCategory": "يرجى اختيار الصنف",
+  "products": "المنتجات",
+  "myProducts": "منتجاتي",
+  "addProduct": "إضافة منتج",
+  "editProduct": "تعديل المنتج",
+  "productTitle": "عنوان المنتج",
+  "price": "السعر",
+  "crop": "المحصول",
+  "noProductsFound": "لم يتم العثور على منتجات.",
+  "noOwnProductsFound": "لم تقم بإضافة أي منتجات بعد.",
+  "noMatchingProductsFound": "لم يتم العثور على منتجات تطابق بحثك.",
+  "productSavedSuccessfully": "تم حفظ المنتج بنجاح!",
+  "productDeletedSuccessfully": "تم حذف المنتج بنجاح!",
+  "errorLoadingCrops": "خطأ في تحميل المحاصيل",
+  "loadingCrops": "جارٍ تحميل المحاصيل...",
+  "noCropsAvailable": "لا توجد محاصيل متاحة للاختيار",
+  "noCropsInCategoryFound": "لم يتم العثور على محاصيل في هذا الصنف.",
+  "searchProducts": "البحث في المنتجات...",
+  "productDetails": "تفاصيل المنتج",
+  "evaluations": "التقييمات",
+  "noEvaluationsYet": "لا توجد تقييمات بعد.",
+  "addYourEvaluation": "أضف تقييمك",
+  "writeYourComment": "اكتب تعليقك...",
+  "submitEvaluation": "إرسال التقييم",
+  "pleaseLoginToAddEvaluation": "يرجى تسجيل الدخول لإضافة تقييم!",
+  "deleteProductConfirmation": "هل أنت متأكد من رغبتك في حذف المنتج \"{productTitle}\"؟",
+   "@deleteProductConfirmation": {
+    "placeholders": {
+      "productTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "noImagesAvailable": "لا توجد صور متاحة",
+  "profileUpdated": "تم تحديث الملف الشخصي!",
+  "guidelines": "الإرشادات",
+  "addGuideline": "إضافة إرشاد",
+  "editGuideline": "تعديل الإرشاد",
+  "guidelineTitle": "عنوان الإرشاد",
+  "guidanceText": "نص الإرشاد",
+  "noGuidelinesFound": "لم يتم العثور على إرشادات.",
+  "noMatchingGuidelinesFound": "لم يتم العثور على إرشادات مطابقة.",
+  "deleteGuidelineConfirmation": "هل أنت متأكد من رغبتك في حذف الإرشاد \"{guidelineTitle}\"؟",
+   "@deleteGuidelineConfirmation": {
+    "placeholders": {
+      "guidelineTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "guidelineSavedSuccessfully": "تم حفظ الإرشاد بنجاح!",
+  "guidelineDeletedSuccessfully": "تم حذف الإرشاد بنجاح!",
+  "filterByCrop": "التصنيف حسب المحصول",
+  "allCrops": "كل المحاصيل",
+  "guidelineDetails": "تفاصيل الإرشاد",
+  "searchGuidelines": "البحث في الإرشادات...",
+  "relevantCrop": "المحصول ذو الصلة",
+  "validation": "التحقق",
+  "pleaseEnterName": "يرجى إدخال اسمك",
+  "nameTooShort": "يجب أن يتكون الاسم من حرفين على الأقل",
+  "pleaseEnterUsername": "يرجى إدخال اسم المستخدم",
+  "usernameTooShort": "يجب أن يتكون اسم المستخدم من 4 أحرف على الأقل",
+  "pleaseEnterPassword": "يرجى إدخال كلمة المرور",
+  "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+  "pleaseEnterPhoneNumber": "يرجى إدخال رقم هاتفك",
+  "invalidPhoneNumber": "صيغة رقم الهاتف غير صالحة",
+  "pleaseEnterPrice": "يرجى إدخال السعر",
+  "priceMustBePositive": "يجب أن يكون السعر أكبر من صفر",
+  "invalidPriceFormat": "صيغة السعر غير صالحة",
+  "pleaseEnterField": "يرجى إدخال {fieldName}",
+  "@pleaseEnterField": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String",
+        "example": "العنوان"
+      }
+    }
+  },
+  "pleaseEnterTitle": "يرجى إدخال العنوان",
+  "pleaseEnterCategoryName": "يرجى إدخال اسم الصنف",
+  "pleaseEnterCropName": "يرجى إدخال اسم المحصول",
+  "pleaseEnterGuidelineTitle": "يرجى إدخال عنوان الإرشاد",
+  "pleaseEnterGuidanceText": "يرجى إدخال نص الإرشاد",
+  "pleaseEnterAddress": "يرجى إدخال عنوانك",
+  "pleaseEnterValidNumber": "يرجى إدخال رقم صالح",
+  "mustBeNonNegative": "{fieldName} يجب أن يكون رقمًا صحيحًا غير سالب",
+  "@mustBeNonNegative": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      }
+    }
+  },
+  "invalidFormat": "صيغة {fieldName} غير صالحة",
+  "@invalidFormat": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      }
+    }
+  },
+  "general": "عام",
+  "ok": "موافق",
+  "close": "إغلاق",
+  "clear": "مسح",
+  "loading": "جارٍ التحميل...",
+  "saving": "جارٍ الحفظ...",
+  "errorOccurred": "حدث خطأ",
+  "manageCategories": "إدارة الأصناف",
+  "manageCrops": "إدارة المحاصيل",
+  "manageProducts": "إدارة المنتجات",
+  "manageGuidelines": "إدارة الإرشادات",
+  "guestUser": "زائر",
+  "visitor": "زائر",
+  "weather": "الطقس",
+  "currentWeather": "الطقس الحالي",
+  "feelsLike": "الإحساس الفعلي",
+  "humidity": "الرطوبة",
+  "wind": "الرياح",
+  "forecast": "التوقعات الجوية",
+  "max": "عظمى",
+  "min": "صغرى",
+  "noData": "لا تتوفر بيانات.",
+  "noWeatherData": "لا توجد بيانات طقس متاحة. أدخل اسم مدينة للبحث.",
+  "error": "خطأ",
+  "chooseLanguage": "اختر لغتك",
+  "changeLanguage": "تغيير اللغة",
+  "errorMessages": "رسائل الخطأ",
+  "databaseError": "حدث خطأ في قاعدة البيانات: {error}",
+  "@databaseError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "authenticationError": "فشل المصادقة: {error}",
+  "@authenticationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cacheError": "خطأ في الذاكرة المؤقتة: {error}",
+  "@cacheError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "productNotFound": "المنتج غير موجود: {error}",
+  "@productNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryNotFound": "الصنف غير موجود: {error}",
+  "@categoryNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cropNotFound": "المحصول غير موجود: {error}",
+  "@cropNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "guidelineNotFound": "الإرشاد غير موجود: {error}",
+  "@guidelineNotFound": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "imageUploadError": "فشل رفع الصورة: {error}",
+  "@imageUploadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك: {error}",
+  "@networkError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "unexpectedError": "حدث خطأ غير متوقع: {error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingData": "خطأ في تحميل البيانات",
+  "errorSavingProduct": "خطأ في حفظ المنتج",
+  "city": "المدينة",
+  "retry": "إعادة المحاولة",
+  "search": "ابحث...",
+  "sortAndFilter": "فرز وتصفية",
+  "sortNewestFirst": "الفرز: الأحدث أولاً",
+  "sortOldestFirst": "الفرز: الأقدم أولاً",
+  "filter": "تصفية",
+  "noFilter": "بدون تصفية / الفرز الافتراضي",
+  "sortByDate": "الترتيب حسب التاريخ",
+  "selectCrop": "اختر المحصول",
+  "pleaseSelectCrop": "يرجى اختيار المحصول",
+  "pleaseSelectAccountType": "يرجى اختيار نوع الحساب",
+  "imagePickerError": "تعذر اختيار الصورة.",
+  "imageDeletionError": "خطأ في حذف الصورة.",
+  "imageUploadFailedWarning": "تحذير: فشل رفع بعض الصور.",
+  "userNotLoggedIn": "يرجى تسجيل الدخول للمتابعة.",
+  "pleaseAddOneImage": "يرجى إضافة صورة واحدة على الأقل.",
+  "addImage": "إضافة صورة",
+  "unknown": "غير معروف",
+  "notAvailable": "غير متوفر",
+  "invalidDate": "تاريخ غير صالح",
+  "active": "نشط",
+  "inactive": "غير نشط",
+  "userId": "معرف المستخدم",
+  "accountStatus": "حالة الحساب",
+  "memberSince": "عضو منذ",
+  "lastUpdated": "آخر تحديث",
+  "nameNotAvailable": "الاسم غير متوفر",
+  "edit": "تعديل",
+  "other": "أخرى",
+  "cannotCall": "تعذر إجراء الاتصال",
+  "currency": "ريال يمني",
+  "noDescriptionAvailable": "لا يتوفر وصف. يعتبر هذا المنتج من أفضل الأنواع المتوفرة.",
+  "organicProduct": "منتج عضوي 100%",
+  "sellerInfo": "معلومات البائع",
+  "orderNow": "اطلب الآن",
+  "additionalInfo": "معلومات إضافية",
+  "certifiedSeller": "بائع معتمد",
+  "farmerReviews": "تقييمات المزارعين",
+  "readMore": "اقرأ المزيد...",
+  "contact": "تواصل",
+  "home": "الرئيسية",
+  "chooseFromGallery": "اختر من المعرض",
+  "takePhoto": "التقط صورة",
+  "profile": "الملف الشخصي",
+
+  "plantDiagnosis": "تشخيص أمراض النبات",
+  "selectImageForDiagnosis": "اختر صورة لتشخيص النبات",
+  "chooseImage": "اختر صورة",
+  "startDiagnosis": "بدء التشخيص",
+  "diagnoseAnotherImage": "تشخيص صورة أخرى",
+  "diagnosisResult": "نتيجة التشخيص:",
+  "errorPickingImage": "فشل في اختيار الصورة",
+  "errorLoadingImage": "فشل في تحميل الصورة",
+  "errorProcessingImage": "خطأ أثناء معالجة الصورة",
+  "modelInferenceError": "خطأ في النموذج: {details}",
+  "@modelInferenceError": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+   "imageProcessingError": "خطأ في الصورة: {details}",
+   "@imageProcessingError": {
+     "placeholders": {
+       "details": {
+         "type": "String"
+       }
+     }
+   },
+  "noImageSelectedYet": "يرجى اختيار صورة أولاً.",
+  "readyToDiagnose": "تم اختيار الصورة. جاهز للتشخيص.",
+  
+    "manageUsers": "إدارة المستخدمين",
+    "searchUsers": "ابحث بالاسم، اسم المستخدم، الهاتف...",
+    "refresh": "تحديث",
+    "noUsersFound": "لم يتم العثور على مستخدمين في النظام.",
+    "noMatchingUsersFound": "لم يتم العثور على مستخدمين يطابقون بحثك.",
+    "changeStatusFor": "تغيير حالة المستخدم {name}",
+    "@changeStatusFor": {
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "فلان الفلاني"
+        }
+      }
+    },
+    "changeAccountTypeFor": "تغيير نوع حساب المستخدم {name}",
+    "@changeAccountTypeFor": {
+      "placeholders": {
+        "name": {
+          "type": "String",
+          "example": "فلانة الفلانية"
+        }
+      }
+    },
+    "activate": "تفعيل",
+    "deactivate": "إلغاء التفعيل",
+    "userStatusUpdated": "تم تحديث حالة المستخدم '{name}'.",
+    "@userStatusUpdated": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userTypeUpdated": "تم تحديث نوع حساب المستخدم '{name}'.",
+    "@userTypeUpdated": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userUpdateFailed": "فشل تحديث المستخدم '{name}'.",
+    "@userUpdateFailed": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "deleteUserConfirmation": "حذف المستخدم '{name}'؟ لا يمكن التراجع عن هذا الإجراء.",
+    "@deleteUserConfirmation": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userDeleted": "تم حذف المستخدم '{name}'.",
+    "@userDeleted": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "userDeletionFailed": "فشل حذف المستخدم '{name}'.",
+    "@userDeletionFailed": {
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "actions": "إجراءات",
+    "confirmLogout": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
+  "publicationDate": "تاريخ النشر",
+  "publicationDateDescription": "ملصق تاريخ النشر"
+}
