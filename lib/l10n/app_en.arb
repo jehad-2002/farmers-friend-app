@@ -417,8 +417,6 @@
       }
     },
     "actions": "Actions",
-    "confirmLogout": "Are you sure you want to log out?",
-    "publicationDate": "Publication Date",
-    "publicationDateDescription": "Label for publication date"
-   
+    "confirmLogout": "Are you sure you want to log out?"
+  
 }

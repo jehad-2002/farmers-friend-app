@@ -1,19 +1,22 @@
 import 'package:farmersfriendapp/core/models/product.dart';
 import 'package:farmersfriendapp/core/models/product_with_image.dart';
 import 'package:farmersfriendapp/core/utils/app_constants.dart';
+// تأكد من أن المسار صحيح
 import 'package:farmersfriendapp/features/product/presentation/widgets/custom_product_card.dart';
 import 'package:flutter/material.dart';
 
+// تعريف أنواع الـ Callbacks لتمريرها للـ Card
 typedef ProductWithImagesCallback = void Function(
     ProductWithImages productWithImages);
 typedef ProductCallback = void Function(Product product);
 
+// ويدجت لعرض المنتجات في شكل شبكة
 class CustomProductGrid extends StatelessWidget {
   final List<ProductWithImages> productsWithImages;
-  final bool showAdminActions;
-  final ProductWithImagesCallback? onProductTap;
-  final ProductCallback? onEditTap;
-  final ProductCallback? onDeleteTap;
+  final bool showAdminActions; // هل يجب إظهار أزرار التعديل والحذف؟
+  final ProductWithImagesCallback? onProductTap; // عند الضغط على المنتج
+  final ProductCallback? onEditTap; // عند الضغط على زر التعديل
+  final ProductCallback? onDeleteTap; // عند تأكيد الحذف
 
   const CustomProductGrid({
     super.key,
@@ -26,29 +29,30 @@ class CustomProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+    // استخدام GridView.builder للأداء الأفضل مع القوائم الطويلة
     return GridView.builder(
+      // إضافة Padding حول الشبكة
       padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.defaultPadding / 2,
-        vertical: AppConstants.smallPadding,
-      ),
+          horizontal: AppConstants.defaultPadding / 2,
+          vertical: AppConstants.smallPadding),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: AppConstants.defaultPadding / 2,
-        mainAxisSpacing: AppConstants.defaultPadding / 2,
+        crossAxisCount: 2, // عدد الأعمدة
+        childAspectRatio: 0.75, // النسبة بين عرض وارتفاع كل عنصر
+        crossAxisSpacing: AppConstants.defaultPadding / 2, // المسافة الأفقية
+        mainAxisSpacing: AppConstants.defaultPadding / 2, // المسافة الرأسية
       ),
-      itemCount: productsWithImages.length,
+      itemCount: productsWithImages.length, // عدد العناصر في الشبكة
       itemBuilder: (context, index) {
         final productWithImagesItem = productsWithImages[index];
+        // بناء كارت المنتج لكل عنصر في القائمة
         return CustomProductCard(
-          key: ValueKey(productWithImagesItem.product.productId),
+          // استخدام مفتاح لـ Flutter للتعرف على العناصر بشكل أفضل عند التغيير
+          key: ValueKey(productWithImagesItem.product.productId ?? 'new_${index}'),
           productWithImages: productWithImagesItem,
           showAdminActions: showAdminActions,
           onTap: onProductTap,
           onEditTap: onEditTap,
-          onDeleteConfirm: onDeleteTap,
+          onDeleteConfirm: onDeleteTap, // تمرير دالة تأكيد الحذف
         );
       },
     );

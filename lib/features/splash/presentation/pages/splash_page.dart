@@ -1,4 +1,3 @@
-import 'package:farmersfriendapp/core/presentation/widgets/loading_indicator.dart';
 import 'package:farmersfriendapp/core/service_locator.dart';
 import 'package:farmersfriendapp/core/utils/app_constants.dart';
 import 'package:farmersfriendapp/features/authentication/data/repositories/auth_repository_impl.dart';
@@ -46,31 +45,19 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor, // Use theme's scaffold background color
-      body: Container(  decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                   theme.colorScheme.secondary.withOpacity(0.7),
-                  theme.colorScheme.background,
-                ],
-              ),
+      backgroundColor: AppConstants.backgroundColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(AppConstants.logoPath, height: 150),
+            const SizedBox(height: 30),
+            const CircularProgressIndicator(
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(AppConstants.primaryColor),
             ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(AppConstants.logoPath, height: 150),
-              const SizedBox(height: 30),
-              LoadingIndicator(
-                isCentered: true,
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );

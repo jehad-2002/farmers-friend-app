@@ -145,16 +145,16 @@ class MultiImagePicker extends StatelessWidget {
     final ButtonStyle defaultStyle = ElevatedButton.styleFrom(
       padding: EdgeInsets.zero,
       backgroundColor: enabled
-          ? theme.colorScheme.secondary.withOpacity(0.6)
+          ? AppConstants.primaryColor.withOpacity(0.6)
           : theme.disabledColor.withOpacity(0.2),
       foregroundColor:
-          enabled ? theme.colorScheme.primary : theme.disabledColor,
+          enabled ? AppConstants.primaryColorDark : AppConstants.greyColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium)),
       side: BorderSide(
           color: enabled
-              ? theme.colorScheme.primary.withOpacity(0.5)
-              : theme.disabledColor.withOpacity(0.5),
+              ? AppConstants.primaryColorDark.withOpacity(0.5)
+              : AppConstants.greyColor.withOpacity(0.5),
           width: 1),
       elevation: 0,
     );
@@ -169,7 +169,7 @@ class MultiImagePicker extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
           border: Border.all(
-            color: enabled ? theme.colorScheme.primary : theme.disabledColor,
+            color: enabled ? AppConstants.primaryColorDark : Colors.grey,
             width: 1,
           ),
         ),
@@ -179,7 +179,6 @@ class MultiImagePicker extends StatelessWidget {
           child: Icon(
             AppConstants.addAPhotoIcon,
             size: imagePreviewSize.width * 0.45,
-            color: theme.iconTheme.color,
           ),
         ),
       ),
@@ -188,8 +187,6 @@ class MultiImagePicker extends StatelessWidget {
 
   Widget _buildImagePreviewTile(
       BuildContext context, dynamic imageSource, bool isExisting) {
-    final theme = Theme.of(context);
-
     return Container(
       width: imagePreviewSize.width,
       height: imagePreviewSize.height,
@@ -205,19 +202,19 @@ class MultiImagePicker extends StatelessWidget {
                 right: 2,
                 top: 2,
                 child: Material(
-                  color: theme.colorScheme.error.withOpacity(0.7),
+                  color: AppConstants.errorColor.withOpacity(0.7),
                   type: MaterialType.circle,
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: () => isExisting
                         ? onExistingImageRemoved(imageSource)
                         : onNewFileRemoved(imageSource as File),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4),
                       child: Icon(
                         AppConstants.closeIcon,
                         size: 14,
-                        color: theme.colorScheme.onError,
+                        color: AppConstants.whiteColor,
                       ),
                     ),
                   ),

@@ -13,8 +13,6 @@ class AuthHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -27,11 +25,11 @@ class AuthHeader extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: theme.textTheme.headlineSmall?.copyWith(
+          style: TextStyle(
             fontSize: 26.0,
             fontWeight: FontWeight.w600,
-            color: theme.hintColor,
-            fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+            color: AppConstants.primaryColorDark,
+            fontFamily: AppConstants.defaultFontFamily,
           ),
         ),
       ],

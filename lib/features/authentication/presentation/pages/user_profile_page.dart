@@ -224,49 +224,46 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           localizations.userProfile,
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-            color: theme.colorScheme.onPrimary,
-          ),
+          style: TextStyle(
+              fontFamily: AppConstants.defaultFontFamily,
+              color: AppConstants.textOnPrimary),
         ),
-        backgroundColor: theme.colorScheme.primary,
+        backgroundColor: AppConstants.primaryColorDark,
         actions: [
           IconButton(
-            onPressed: () async {
-              final dbHelper = DatabaseHelper();
-              final authLocalDataSource =
-                  AuthLocalDataSourceImpl(dbHelper: dbHelper);
-              try {
-                await authLocalDataSource.clearUserData();
-                Navigator.pushReplacementNamed(context, '/login');
-              } catch (e) {}
-            },
-            icon: Icon(
-              Icons.logout,
-              color: theme.colorScheme.onPrimary,
-            ),
-          ),
+              onPressed: () async {
+                final dbHelper = DatabaseHelper();
+                final authLocalDataSource =
+                    AuthLocalDataSourceImpl(dbHelper: dbHelper);
+                try {
+                  await authLocalDataSource.clearUserData();
+                  Navigator.pushReplacementNamed(context, '/login');
+                } catch (e) {}
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ))
         ],
       ),
-      body: _buildProfileForm(localizations, theme),
+      body: _buildProfileForm(localizations),
     );
   }
 
-  Widget _buildProfileForm(AppLocalizations localizations, ThemeData theme) {
+  Widget _buildProfileForm(AppLocalizations localizations) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            theme.colorScheme.secondary.withOpacity(0.7),
-            theme.colorScheme.background,
+            AppConstants.secondaryColor.withOpacity(0.7),
+            AppConstants.backgroundColor,
           ],
         ),
       ),
@@ -332,23 +329,24 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12.0, vertical: 16.0),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.surface.withOpacity(0.8),
+                            color: Colors.white.withOpacity(0.8),
                             borderRadius: BorderRadius.circular(25.0),
                           ),
                           child: Row(
                             children: [
                               Icon(Icons.calendar_today_outlined,
-                                  color: theme.colorScheme.primary),
+                                  color: AppConstants.primaryColorDark),
                               const SizedBox(width: 12.0),
                               Text(
                                 _selectedDate == null
                                     ? localizations.selectDateOfBirth
                                     : '${localizations.dateOfBirth}: ${AppDateUtils.formatSimpleDate(context, _selectedDate!.toIso8601String())}',
-                                style: theme.textTheme.bodyMedium?.copyWith(
+                                style: TextStyle(
                                   fontSize: 16,
                                   color: _selectedDate == null
-                                      ? theme.disabledColor
-                                      : theme.colorScheme.primary,
+                                      ? Colors.grey
+                                      : AppConstants.primaryColorDark,
+                                  fontFamily: AppConstants.defaultFontFamily,
                                 ),
                               ),
                             ],

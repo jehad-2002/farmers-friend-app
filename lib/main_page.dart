@@ -1,17 +1,16 @@
-import 'package:farmersfriendapp/core/presentation/widgets/custom_widgets.dart';
+// lib/features/core/presentation/pages/main_page.dart
+
+import 'package:farmersfriendapp/prof.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:farmersfriendapp/core/presentation/widgets/custom_app_bar.dart';
 import 'package:farmersfriendapp/core/utils/app_constants.dart';
-import 'package:farmersfriendapp/core/utils/user_utils.dart';
+import 'package:farmersfriendapp/core/service_locator.dart';
 import 'package:farmersfriendapp/features/authentication/presentation/pages/user_management_page.dart';
 import 'package:farmersfriendapp/features/diagnosis/presentation/screens/diagnosis_screen.dart';
 import 'package:farmersfriendapp/features/guideline/presentation/pages/guideline_list_page.dart';
 import 'package:farmersfriendapp/features/product/presentation/pages/product_list_page.dart';
 import 'package:farmersfriendapp/features/weather/presentation/pages/weather_page.dart';
-import 'package:farmersfriendapp/main.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:farmersfriendapp/core/service_locator.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/user_profile_avatar.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/custom_app_bar.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -22,17 +21,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  String? userName;
-  String? userImage;
-  int? _userId;
   bool _isLoading = true;
-  int? accountType;
-  final List<Widget> _pages = [
-    const ProductListPage(userId: 0),
-    const WeatherPage(),
-    const GuidelineListPage(userId: 0),
-    DiagnosisScreen(),
-  ];
+  int? _userId;
+  int? _accountType;
+
+  // قوائم مُهيَّأة افتراضيًا لتجنّب LateInitializationError
+  List<Widget> _pages = [];
+  List<BottomNavigationBarItem> _navigationItems = [];
 
   @override
   void initState() {
@@ -41,268 +36,134 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _loadUserData() async {
-    final authLocalDataSource = sl.authLocalDataSource;
-    final userId = await authLocalDataSource.getUserId();
+    final authLocal = sl.authLocalDataSource;
+    final userId = await authLocal.getUserId();
 
     if (userId != null) {
-      final user = await authLocalDataSource.getUser(userId);
-      accountType = user.accountType;
+      final user = await authLocal.getUser(userId);
+      _accountType = user.accountType;
       _userId = user.id;
-      setState(() {
-        userName = user.name;
-        userImage = user.profileImage;
-        _isLoading = false;
-      });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
     }
+
+    setState(() {
+      _isLoading = false;
+      // نترك التهيئة النهائية لـ build بناء على _isLoading
+    });
+  }
+
+  /// يهيئ الصفحات وعناصر التنقل عند أول بناء بعد تحميل البيانات
+  void _maybeSetupNavigation(AppLocalizations loc) {
+    if (_navigationItems.isEmpty && !_isLoading) {
+      _pages = _buildPagesByAccountType();
+      _navigationItems = _buildNavItemsByAccountType(loc);
+      // نتأكد أن selectedIndex ضمن النطاق الصحيح
+      if (_selectedIndex >= _pages.length) {
+        _selectedIndex = 0;
+      }
+    }
+  }
+
+  List<Widget> _buildPagesByAccountType() {
+    switch (_accountType) {
+      case AppConstants.accountTypeAdmin:
+        return [
+          const ProductListPage(userId: 0),
+          const WeatherPage(),
+          const GuidelineListPage(userId: 0),
+          DiagnosisScreen(),
+          const ProfileScreen(),
+        ];
+      case AppConstants.accountTypeFarmer:
+        return [
+          ProductListPage(userId: _userId!),
+          const WeatherPage(),
+          const GuidelineListPage(userId: 0),
+          DiagnosisScreen(),
+        ];
+      case AppConstants.accountTypeAgriculturalGuide:
+        return [
+          GuidelineListPage(userId: _userId!),
+          const WeatherPage(),
+          DiagnosisScreen(),
+        ];
+      default:
+        // ضيف هنا صفحات افتراضية إذا لم يُعرف نوع الحساب
+        return [
+          const ProductListPage(userId: 0),
+          const WeatherPage(),
+          const GuidelineListPage(userId: 0),
+          DiagnosisScreen(),
+        ];
+    }
+  }
+
+  List<BottomNavigationBarItem> _buildNavItemsByAccountType(
+      AppLocalizations loc) {
+    switch (_accountType) {
+      case AppConstants.accountTypeAdmin:
+        return [
+          _navItem(Icons.shopping_basket_outlined, loc.products),
+          _navItem(Icons.wb_sunny_outlined, loc.weather),
+          _navItem(Icons.lightbulb_outline, loc.guidelines),
+          _navItem(Icons.healing_outlined, loc.plantDiagnosis),
+          _navItem(Icons.supervisor_account, loc.manageUsers),
+        ];
+      case AppConstants.accountTypeFarmer:
+        return [
+          _navItem(Icons.shopping_basket_outlined, loc.products),
+          _navItem(Icons.wb_sunny_outlined, loc.weather),
+          _navItem(Icons.lightbulb_outline, loc.guidelines),
+          _navItem(Icons.healing_outlined, loc.plantDiagnosis),
+        ];
+      case AppConstants.accountTypeAgriculturalGuide:
+        return [
+          _navItem(Icons.lightbulb_outline, loc.guidelines),
+          _navItem(Icons.wb_sunny_outlined, loc.weather),
+          _navItem(Icons.healing_outlined, loc.plantDiagnosis),
+        ];
+      default:
+        return [
+          _navItem(Icons.shopping_basket_outlined, loc.products),
+          _navItem(Icons.wb_sunny_outlined, loc.weather),
+          _navItem(Icons.lightbulb_outline, loc.guidelines),
+          _navItem(Icons.healing_outlined, loc.plantDiagnosis),
+        ];
+    }
+  }
+
+  BottomNavigationBarItem _navItem(IconData icon, String label) {
+    return BottomNavigationBarItem(icon: Icon(icon), label: label);
+  }
+
+  String _appBarTitle(AppLocalizations loc) {
+    if (_navigationItems.isEmpty) return loc.appTitle;
+    return _navigationItems[_selectedIndex].label ?? loc.appTitle;
   }
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    final List<BottomNavigationBarItem> navigationItems = [
-      BottomNavigationBarItem(
-        icon: const Icon(Icons.shopping_basket_outlined),
-        label: localizations.products,
-      ),
-      BottomNavigationBarItem(
-        icon: const Icon(Icons.wb_sunny_outlined),
-        label: localizations.weather,
-      ),
-      BottomNavigationBarItem(
-        icon: const Icon(Icons.lightbulb_outline),
-        label: localizations.guidelines,
-      ),
-      BottomNavigationBarItem(
-        icon: const Icon(Icons.lightbulb_outline),
-        label: localizations.plantDiagnosis,
-      ),
-    ];
+    // نهيئ التنقل عند أول build بعد انتهاء التحميل
+    _maybeSetupNavigation(loc);
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: _getAppBarTitle(localizations),
-      ),
-      drawer: _isLoading ? null : _buildDrawer(context, localizations),
+      appBar: CustomAppBar(title: _appBarTitle(loc)),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _buildCurrentPage(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        backgroundColor: theme.colorScheme.surface,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-        items: navigationItems,
-        type: BottomNavigationBarType.fixed,
-      ),
-    );
-  }
-
-  Widget _buildCurrentPage() {
-    return _pages[_selectedIndex];
-  }
-
-  String _getAppBarTitle(AppLocalizations localizations) {
-    switch (_selectedIndex) {
-      case 0:
-        return localizations.products;
-      case 1:
-        return localizations.weather;
-      case 2:
-        return localizations.guidelines;
-      case 3:
-        return localizations.plantDiagnosis;
-      default:
-        return localizations.appTitle;
-    }
-  }
-
-  Widget _buildDrawer(BuildContext context, AppLocalizations localizations) {
-    return Drawer(
-      child: Column(
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              image: const DecorationImage(
-                image: AssetImage("assets/images/logo.webp"),
-                fit: BoxFit.cover,
-                opacity: 0.4,
-              ),
+          : _pages[_selectedIndex],
+      bottomNavigationBar: _isLoading
+          ? null
+          : BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: (i) => setState(() => _selectedIndex = i),
+              items: _navigationItems,
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: theme.colorScheme.surface,
+              selectedItemColor: AppConstants.primaryColorDark,
+              unselectedItemColor: AppConstants.greyColor,
             ),
-            currentAccountPicture: UserProfileAvatar(
-              imagePath: userImage,
-              radius: 32,
-              badge: accountType != null
-                  ? buildUserTypeBadge(context, accountType!)
-                  : null,
-              isNetworkImage:
-                  userImage != null && userImage!.startsWith('http'),
-            ),
-            accountName: Text(
-              userName ?? localizations.guestUser,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-            ),
-            accountEmail: Text(
-              UserUtils.getAccountTypeName(accountType!, localizations),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
-                  ),
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                ListTile(
-                  leading: const Icon(Icons.account_circle_outlined,
-                      size: 28.0, color: AppConstants.brownColor),
-                  title: Text(localizations.userProfile,
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/profile');
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.language,
-                      size: 28.0, color: AppConstants.brownColor),
-                  title: Text(localizations.changeLanguage,
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  onTap: () {
-                    Navigator.pop(context);
-                    showDialog(
-                      context: context,
-                      builder: (context) => LanguageSelectionDialog(
-                        onLocaleSelected: (Locale newLocale) {
-                          changeLanguage(context, newLocale);
-                        },
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.brightness_6_outlined,
-                      size: 28.0, color: AppConstants.brownColor),
-                  title: Text('change Theme',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  onTap: () {
-                    Navigator.pop(context);
-                    toggleTheme(context);
-                  },
-                ),
-                const Divider(),
-                if (accountType == AppConstants.accountTypeAdmin) ...[
-                  ListTile(
-                    leading: const Icon(Icons.admin_panel_settings_outlined,
-                        size: 28.0, color: AppConstants.brownColor),
-                    title: Text(localizations.manageCategories,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/categories');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.settings,
-                        size: 28.0, color: AppConstants.brownColor),
-                    title: Text(localizations.manageCrops,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/crops');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.settings,
-                        size: 28.0, color: AppConstants.brownColor),
-                    title: Text(localizations.manageUsers,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserManagementPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ] else if (accountType == AppConstants.accountTypeFarmer) ...[
-                  ListTile(
-                    leading: const Icon(Icons.agriculture_outlined,
-                        size: 28.0, color: AppConstants.brownColor),
-                    title: Text(localizations.products,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ProductListPage(userId: _userId!),
-                        ),
-                      );
-                    },
-                  ),
-                ] else if (accountType ==
-                    AppConstants.accountTypeAgriculturalGuide) ...[
-                  ListTile(
-                    leading: const Icon(Icons.lightbulb_outlined,
-                        size: 28.0, color: AppConstants.brownColor),
-                    title: Text(localizations.guidelineTitle,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              GuidelineListPage(userId: _userId!),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.exit_to_app,
-                      size: 28.0, color: AppConstants.brownColor),
-                  title: Text(localizations.logout,
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  onTap: () async {
-                    final authLocalDataSource = sl.authLocalDataSource;
-                    try {
-                      await authLocalDataSource.clearUserData();
-                      Navigator.pushReplacementNamed(context, '/login');
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("فشل في تسجيل الخروج: $e"),
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -51,7 +51,7 @@ class _ImageGalleryState extends State<ImageGallery> {
       } else {
         return FileImage(File(image));
       }
-    } else if (image is guidelineImage) {
+    } else if (image is ProductImage) {
       if (image.imagePath.startsWith('http://') ||
           image.imagePath.startsWith('https://')) {
         return CachedNetworkImageProvider(image.imagePath);
@@ -66,35 +66,24 @@ class _ImageGalleryState extends State<ImageGallery> {
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     final image = widget.images[index];
     final imageProvider = _getImageProvider(image);
-    final theme = Theme.of(context);
 
+    // هنا نستخدم customChild لنضيف GestureDetector
     return PhotoViewGalleryPageOptions.customChild(
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FullScreenImage(
-                images: widget.images,
-                initialIndex: index,
-              ),
-            ),
-          );
+          // عند الضغط على الصورة
+          // مثال: إغلاق المعرض والعودة مع النتيجة
+          Navigator.push(context, MaterialPageRoute(builder: (context) => FullScreenImage(images: widget.images, initialIndex: index),));
         },
         child: PhotoView(
-          backgroundDecoration: BoxDecoration(
-            color: theme.scaffoldBackgroundColor, // Use theme's scaffold background color
-          ),
+          backgroundDecoration: BoxDecoration(color: AppConstants.brownColor),
           imageProvider: imageProvider,
           initialScale: PhotoViewComputedScale.contained,
           minScale: PhotoViewComputedScale.contained,
           maxScale: PhotoViewComputedScale.covered * 2,
           errorBuilder: (context, event, stackTrace) {
-            return Center(
-              child: Icon(
-                Icons.error,
-                color: theme.colorScheme.error, // Use theme's error color
-              ),
+            return const Center(
+              child: Icon(Icons.error, color: Colors.red),
             );
           },
           heroAttributes: PhotoViewHeroAttributes(tag: image.toString()),
@@ -105,8 +94,6 @@ class _ImageGalleryState extends State<ImageGallery> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       body: Stack(
         alignment: Alignment.bottomRight,
@@ -115,8 +102,8 @@ class _ImageGalleryState extends State<ImageGallery> {
             scrollPhysics: const BouncingScrollPhysics(),
             builder: _buildItem,
             itemCount: widget.images.length,
-            backgroundDecoration: BoxDecoration(
-              color: theme.colorScheme.background, // Use theme's background color
+            backgroundDecoration:  BoxDecoration(
+              color: AppConstants.accentColor,
             ),
             pageController: _pageController,
             onPageChanged: _onPageChanged,
@@ -132,13 +119,13 @@ class _ImageGalleryState extends State<ImageGallery> {
                   horizontal: 8.0,
                 ),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary, // Use theme's primary color
+              color: AppConstants.primaryColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Text(
                   "${_currentIndex + 1} / ${widget.images.length}",
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onPrimary, // Use theme's onPrimary color
+                  style: const TextStyle(
+                    color: Colors.white,
                     fontSize: 16.0,
                   ),
                 ),
@@ -148,7 +135,7 @@ class _ImageGalleryState extends State<ImageGallery> {
             top: MediaQuery.of(context).padding.top + 8,
             left: 8,
             child: IconButton(
-              icon: Icon(Icons.close, color: theme.colorScheme.onPrimary), // Use theme's onPrimary color
+              icon: const Icon(Icons.close, color: Colors.white),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),

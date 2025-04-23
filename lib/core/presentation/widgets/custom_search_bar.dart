@@ -63,18 +63,18 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     final bool isEnabled = widget.enabled;
 
     final effectiveBorderColor = isEnabled
-        ? theme.dividerColor.withOpacity(0.7)
-        : theme.disabledColor.withOpacity(0.4);
+        ? AppConstants.brownColor.withOpacity(0.7)
+        : AppConstants.greyColor.withOpacity(0.4);
     final effectiveIconColor = isEnabled
-        ? theme.iconTheme.color
-        : theme.disabledColor;
+        ? AppConstants.primaryColorDark
+        : AppConstants.greyColor;
     final effectiveFillColor = isEnabled
-        ? theme.colorScheme.surface.withOpacity(0.8)
+        ? AppConstants.whiteColor.withOpacity(0.8)
         : theme.disabledColor.withOpacity(0.1);
     final effectiveTextColor = isEnabled
-        ? theme.textTheme.bodyLarge?.color?.withOpacity(0.9)
-        : theme.textTheme.bodyMedium?.color?.withOpacity(0.7);
-    final effectiveHintColor = theme.hintColor.withOpacity(0.6);
+        ? AppConstants.textColorPrimary.withOpacity(0.9)
+        : AppConstants.textColorSecondary.withOpacity(0.7);
+    final effectiveHintColor = AppConstants.textColorSecondary.withOpacity(0.6);
 
     return TextField(
       controller: widget.controller,
@@ -85,16 +85,15 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         fontSize: 16,
         fontFamily: AppConstants.defaultFontFamily,
       ),
-      cursorColor: theme.colorScheme.primary,
+      cursorColor: AppConstants.primaryColorDark,
       textInputAction: TextInputAction.search,
       onSubmitted: widget.onChanged,
       decoration: InputDecoration(
         hintText: widget.hintText ?? localizations.search,
         hintStyle: TextStyle(
-          color: effectiveHintColor,
-          fontFamily: AppConstants.defaultFontFamily,
-          fontSize: 16,
-        ),
+            color: effectiveHintColor,
+            fontFamily: AppConstants.defaultFontFamily,
+            fontSize: 16),
         filled: true,
         fillColor: effectiveFillColor,
         contentPadding: const EdgeInsets.symmetric(
@@ -116,30 +115,34 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
               )
             : null,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadiusLarge),
+          borderRadius:
+              BorderRadius.circular(AppConstants.borderRadiusLarge),
           borderSide: BorderSide(
             color: effectiveBorderColor,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadiusLarge),
+          borderRadius:
+              BorderRadius.circular(AppConstants.borderRadiusLarge),
           borderSide: BorderSide(
             color: effectiveBorderColor,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadiusLarge),
+          borderRadius:
+              BorderRadius.circular(AppConstants.borderRadiusLarge),
           borderSide: BorderSide(
-            color: theme.colorScheme.primary,
+            color: AppConstants.primaryColorDark,
             width: 1.2,
           ),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadiusLarge),
+          borderRadius:
+              BorderRadius.circular(AppConstants.borderRadiusLarge),
           borderSide: BorderSide(
-            color: theme.disabledColor.withOpacity(0.3),
+            color: AppConstants.greyColor.withOpacity(0.3),
             width: 1,
           ),
         ),

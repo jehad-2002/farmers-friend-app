@@ -17,13 +17,12 @@ class WeatherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return BlocProvider(
       create: (context) => WeatherBloc(getWeather: sl.getWeather)
         ..add(const FetchWeatherForDefaultCity()),
       child: Scaffold(
-        backgroundColor: theme.scaffoldBackgroundColor, // Use theme's scaffold background color
+        backgroundColor: AppConstants.backgroundColor,
         body: Column(
           children: [
             Padding(
@@ -46,26 +45,24 @@ class WeatherPage extends StatelessWidget {
                     return WeatherDisplay(weather: state.weather.weather);
                   } else if (state is WeatherLoadFailure) {
                     return ErrorIndicator(
-                      message: state.message,
-                      onRetry: () {
-                        context
-                            .read<WeatherBloc>()
-                            .add(const FetchWeatherForDefaultCity());
-                      },
-                    );
+                        message: state.message,
+                        onRetry: () {
+                          context
+                              .read<WeatherBloc>()
+                              .add(const FetchWeatherForDefaultCity());
+                        });
                   } else {
                     return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(AppConstants.largePadding),
-                        child: Text(
-                          localizations.enterCityPrompt,
+                        child: Padding(
+                      padding: const EdgeInsets.all(AppConstants.largePadding),
+                      child: Text(localizations.enterCityPrompt,
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: theme.colorScheme.onBackground.withOpacity(0.7), // Use theme's onBackground color
-                          ),
-                        ),
-                      ),
-                    );
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                  color: AppConstants.textColorSecondary)),
+                    ));
                   }
                 },
               ),

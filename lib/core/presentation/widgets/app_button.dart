@@ -1,3 +1,4 @@
+import 'package:farmersfriendapp/core/presentation/theme/app_styles.dart';
 import 'package:farmersfriendapp/core/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,6 @@ class AppButton extends StatelessWidget {
   final double minWidth;
   final double elevation;
   final TextStyle? textStyle;
-
   const AppButton({
     super.key,
     required this.text,
@@ -29,26 +29,25 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final bool isActuallyEnabled = enabled && !isLoading;
 
     final Color effectiveBackgroundColor =
-        backgroundColor ?? theme.primaryColor; // Use theme's primary color
+        backgroundColor ?? AppConstants.primaryColorDark;
     final Color effectiveForegroundColor =
-        foregroundColor ?? theme.colorScheme.onPrimary; // Use theme's onPrimary color
+        foregroundColor ?? AppConstants.whiteColor;
     final Color disabledBackgroundColor =
-        theme.disabledColor.withOpacity(0.4); // Use theme's disabled color
+        effectiveBackgroundColor.withOpacity(0.4);
     final Color disabledForegroundColor =
-        theme.disabledColor.withOpacity(0.6);
+        effectiveForegroundColor.withOpacity(0.6);
 
     final TextStyle effectiveTextStyle =
-        (textStyle ?? theme.textTheme.labelLarge ?? TextStyle()).copyWith(
+        (textStyle ?? AppStyles.buttonTextStyle).copyWith(
       color: isActuallyEnabled
           ? effectiveForegroundColor
           : disabledForegroundColor,
       fontSize: 17,
       fontWeight: FontWeight.w500,
-      fontFamily: AppConstants.defaultFontFamily, // Use AppConstants font
+      fontFamily: AppConstants.defaultFontFamily,
     );
 
     return ConstrainedBox(
@@ -70,7 +69,7 @@ class AppButton extends StatelessWidget {
                 BorderRadius.circular(AppConstants.borderRadiusMedium),
           ),
           elevation: isActuallyEnabled ? elevation : 0,
-          shadowColor: theme.shadowColor.withOpacity(0.15), // Use theme's shadow color
+          shadowColor: Colors.black.withOpacity(0.15),
           minimumSize: const Size(double.infinity, 44),
         ),
         child: isLoading

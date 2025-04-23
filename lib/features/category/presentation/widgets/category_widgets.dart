@@ -19,42 +19,35 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return ListView.separated(
       itemCount: categories.length,
       separatorBuilder: (context, index) => Divider(
         height: 1,
         indent: 16,
         endIndent: 16,
-        color: theme.dividerColor.withOpacity(0.3),
+        color: AppConstants.greyColor.withOpacity(0.3),
       ),
       itemBuilder: (context, index) {
         final category = categories[index];
         return ListTile(
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: AppConstants.defaultPadding,
-            vertical: AppConstants.smallPadding,
-          ),
+              horizontal: AppConstants.defaultPadding,
+              vertical: AppConstants.smallPadding),
           leading: CircleAvatar(
-            backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-            child: Icon(
-              AppConstants.categoryIcon,
-              color: theme.colorScheme.primary,
-            ),
+            backgroundColor: Theme.of(context).primaryColorLight,
+            child: Icon(AppConstants.categoryIcon,
+                color: Theme.of(context).primaryColorDark),
           ),
-          title: Text(
-            category.categoryName,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          title: Text(category.categoryName,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontFamily: AppConstants.defaultFontFamily,
+                  fontWeight: FontWeight.w500)),
           subtitle: category.categoryDescription!.isNotEmpty
               ? Text(
                   category.categoryDescription!,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppConstants.textColorSecondary,
+                      fontFamily: AppConstants.defaultFontFamily),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 )
@@ -62,10 +55,8 @@ class CategoryList extends StatelessWidget {
           onTap: onItemTap != null ? () => onItemTap!(category) : null,
           trailing: onDeleteItemTap != null
               ? IconButton(
-                  icon: Icon(
-                    AppConstants.deleteIcon,
-                    color: theme.colorScheme.error,
-                  ),
+                  icon: Icon(AppConstants.deleteIcon,
+                      color: Theme.of(context).colorScheme.error),
                   tooltip: AppLocalizations.of(context)?.delete,
                   onPressed: () => _confirmDeletion(context, category),
                 )
@@ -77,38 +68,29 @@ class CategoryList extends StatelessWidget {
 
   void _confirmDeletion(BuildContext context, Category category) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(localizations.confirmDelete),
         content: Text(
           localizations.deleteCategoryConfirmation(category.categoryName),
-          style: theme.textTheme.bodyMedium,
+          style: TextStyle(fontFamily: AppConstants.defaultFontFamily),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(
-              localizations.cancel,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
-              ),
-            ),
+            child: Text(localizations.cancel,
+                style: TextStyle(color: AppConstants.textColorSecondary)),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(dialogContext).pop();
               onDeleteItemTap!(category);
             },
-            child: Text(
-              localizations.delete,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.error,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: Text(localizations.delete,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontWeight: FontWeight.bold)),
           ),
         ],
       ),

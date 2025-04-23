@@ -62,20 +62,17 @@ class GuidelineCard extends StatelessWidget {
     return Card(
       elevation: AppConstants.elevationMedium,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
-      ),
+          borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium)),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap != null ? () => onTap!(guideline) : null,
-        splashColor: theme.colorScheme.primary.withOpacity(0.1),
+        splashColor: theme.primaryColor.withOpacity(0.1),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: 3,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
+                flex: 3,
+                child: Stack(fit: StackFit.expand, children: [
                   Image(
                     image: imageProvider,
                     fit: BoxFit.cover,
@@ -84,155 +81,124 @@ class GuidelineCard extends StatelessWidget {
                                 loadingProgress != null)
                             ? Center(
                                 child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
-                                  strokeWidth: 2.5,
-                                ),
-                              )
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                    strokeWidth: 2.5))
                             : child,
                     errorBuilder: (context, error, stack) {
+                      print("GuidelineCard Image Error: $error");
                       return Container(
-                        color: theme.colorScheme.surface.withOpacity(0.1),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.broken_image_outlined,
-                          color: theme.iconTheme.color?.withOpacity(0.6),
-                          size: 40,
-                        ),
-                      );
+                          color: AppConstants.greyColor.withOpacity(0.1),
+                          alignment: Alignment.center,
+                          child: Icon(Icons.broken_image_outlined,
+                              color: AppConstants.greyColor, size: 40));
                     },
                   ),
                   if (showAdminActions &&
                       (onEditTap != null || onDeleteConfirm != null))
                     Positioned(
-                      bottom: AppConstants.smallPadding / 2,
-                      right: AppConstants.smallPadding / 2,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppConstants.smallPadding * 0.75,
-                          vertical: AppConstants.smallPadding / 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.65),
-                          borderRadius: BorderRadius.circular(
-                            AppConstants.borderRadiusLarge,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
+                        bottom: AppConstants.smallPadding / 2,
+                        right: AppConstants.smallPadding / 2,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppConstants.smallPadding * 0.75,
+                              vertical: AppConstants.smallPadding / 3),
+                          decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.borderRadiusLarge)),
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
                             if (onEditTap != null)
                               _buildAdminActionButton(
-                                context: context,
-                                icon: AppConstants.editIcon,
-                                tooltip: localizations.edit,
-                                color: theme.colorScheme.onSurface,
-                                onPressed: () => onEditTap!(guideline),
-                              ),
+                                  context: context,
+                                  icon: AppConstants.editIcon,
+                                  tooltip: localizations.edit,
+                                  color: AppConstants.whiteColor,
+                                  onPressed: () => onEditTap!(guideline)),
                             if (onEditTap != null && onDeleteConfirm != null)
                               const SizedBox(
-                                width: AppConstants.smallPadding / 2,
-                              ),
+                                  width: AppConstants.smallPadding / 2),
                             if (onDeleteConfirm != null)
                               _buildAdminActionButton(
-                                context: context,
-                                icon: AppConstants.deleteIcon,
-                                tooltip: localizations.delete,
-                                color: theme.colorScheme.error,
-                                onPressed: () => _showDeleteConfirmation(
-                                  context,
-                                  localizations,
-                                  guideline,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
+                                  context: context,
+                                  icon: AppConstants.deleteIcon,
+                                  tooltip: localizations.delete,
+                                  color:
+                                      AppConstants.errorColor.withOpacity(0.9),
+                                  onPressed: () => _showDeleteConfirmation(
+                                      context, localizations, guideline)),
+                          ]),
+                        )),
+                ])),
             Padding(
-              padding: const EdgeInsets.all(AppConstants.smallPadding + 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    guideline.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      height: 1.2,
-                    ),
-                  ),
-                  if (guideline.publicationDate != null &&
-                      guideline.publicationDate!.isNotEmpty) ...[
-                    const SizedBox(height: 3),
-                    Text(
-                      AppDateUtils.formatSimpleDate(
-                        context,
-                        guideline.publicationDate!,
-                      ),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
+                padding: const EdgeInsets.all(AppConstants.smallPadding + 2),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(guideline.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: AppConstants.defaultFontFamily,
+                              height: 1.2)),
+                      if (guideline.publicationDate != null &&
+                          guideline.publicationDate!.isNotEmpty) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                            AppDateUtils.formatSimpleDate(
+                                context, guideline.publicationDate!),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppConstants.textColorSecondary,
+                                fontFamily: AppConstants.defaultFontFamily,
+                                fontSize: 11)),
+                      ]
+                    ])),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAdminActionButton({
-    required BuildContext context,
-    required IconData icon,
-    required String tooltip,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
+  Widget _buildAdminActionButton(
+      {required BuildContext context,
+      required IconData icon,
+      required String tooltip,
+      required Color color,
+      required VoidCallback onPressed}) {
     return Material(
-      type: MaterialType.transparency,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: IconButton(
-        icon: Icon(icon, size: 18),
-        color: color,
-        padding: const EdgeInsets.all(6.0),
-        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-        splashRadius: 18,
-        tooltip: tooltip,
-        onPressed: onPressed,
-      ),
-    );
+        type: MaterialType.transparency,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: IconButton(
+            icon: Icon(icon, size: 18),
+            color: color,
+            padding: const EdgeInsets.all(6.0),
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+            splashRadius: 18,
+            tooltip: tooltip,
+            onPressed: onPressed));
   }
 
-  void _showDeleteConfirmation(
-    BuildContext context,
-    AppLocalizations localizations,
-    Guideline guideline,
-  ) {
+  void _showDeleteConfirmation(BuildContext context,
+      AppLocalizations localizations, Guideline guideline) {
     final theme = Theme.of(context);
     showDialog(
-      context: context,
-      builder: (_) => ConfirmDialog(
-        title: localizations.confirmDelete,
-        content: localizations.deleteGuidelineConfirmation(guideline.title),
-        confirmText: localizations.delete,
-        confirmTextColor: theme.colorScheme.error,
-        onConfirm: () {
-          if (onDeleteConfirm != null) onDeleteConfirm!(guideline);
-        },
-      ),
-    );
+        context: context,
+        builder: (_) => ConfirmDialog(
+              title: localizations.confirmDelete,
+              content:
+                  localizations.deleteGuidelineConfirmation(guideline.title),
+              confirmText: localizations.delete,
+              confirmTextColor: theme.colorScheme.error,
+              onConfirm: () {
+                if (onDeleteConfirm != null) onDeleteConfirm!(guideline);
+              },
+            ));
   }
 }

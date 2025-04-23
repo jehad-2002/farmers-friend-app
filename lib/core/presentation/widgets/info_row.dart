@@ -26,33 +26,28 @@ class InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectiveIconColor = iconColor ?? theme.iconTheme.color; // Use theme's icon color
-    final effectiveTitleColor = titleColor ?? theme.textTheme.titleSmall?.color; // Use theme's titleSmall color
-    final effectiveValueColor = valueColor ?? theme.textTheme.bodyMedium?.color; // Use theme's bodyMedium color
+    final effectiveIconColor = iconColor ?? AppConstants.brownColor;
+    final effectiveTitleColor = titleColor ?? AppConstants.textColorPrimary;
+    final effectiveValueColor = valueColor ?? AppConstants.textColorSecondary;
 
     final effectiveTitleStyle = titleStyle ??
         theme.textTheme.titleSmall?.copyWith(
-          fontWeight: FontWeight.w600,
-          color: effectiveTitleColor,
-          fontFamily: AppConstants.defaultFontFamily, // Use AppConstants font
-        ) ??
+            fontWeight: FontWeight.w600,
+            color: effectiveTitleColor,
+            fontFamily: AppConstants.defaultFontFamily) ??
         TextStyle(
-          fontWeight: FontWeight.w600,
-          color: effectiveTitleColor,
-          fontFamily: AppConstants.defaultFontFamily,
-          fontSize: 14,
-        );
-
+            fontWeight: FontWeight.w600,
+            color: effectiveTitleColor,
+            fontFamily: AppConstants.defaultFontFamily,
+            fontSize: 14);
     final effectiveValueStyle = valueStyle ??
         theme.textTheme.bodyMedium?.copyWith(
-          color: effectiveValueColor,
-          fontFamily: AppConstants.defaultFontFamily, // Use AppConstants font
-        ) ??
+            color: effectiveValueColor,
+            fontFamily: AppConstants.defaultFontFamily) ??
         TextStyle(
-          color: effectiveValueColor,
-          fontFamily: AppConstants.defaultFontFamily,
-          fontSize: 14,
-        );
+            color: effectiveValueColor,
+            fontFamily: AppConstants.defaultFontFamily,
+            fontSize: 14);
 
     return Padding(
       padding:

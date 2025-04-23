@@ -1,169 +1,140 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:farmersfriendapp/features/diagnosis/data/repositories/diagnosis_constants.dart'; // تأكد من صحة هذا المسار
+import 'package:farmersfriendapp/features/product/data/diagnosis_constants.dart';
 import 'package:image/image.dart' as img_lib;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-// واجهة مجردة لمصدر البيانات المحلي للتشخيص
 abstract class DiagnosisLocalDataSource {
-  /// تحميل نموذج TFLite.
   Future<void> loadModel();
-
-  /// إجراء التشخيص على ملف الصورة المحدد.
-  ///
-  /// يرجع اسم الفئة المتوقعة (باللغة الإنجليزية) عند النجاح.
   Future<String> runDiagnosis(File imageFile);
 }
 
-// التنفيذ الفعلي لمصدر البيانات المحلي
 class DiagnosisLocalDataSourceImpl implements DiagnosisLocalDataSource {
-  Interpreter? _interpreter; // مفسر TFLite
-  bool _isModelLoaded = false; // علم لتتبع حالة تحميل النموذج
+  Interpreter? _interpreter;
+  bool _isModelLoaded = false;
 
-  /// التأكد من تحميل النموذج قبل استخدامه.
+  // Lazy load the model on first diagnosis request if not already loaded
   Future<void> _ensureModelLoaded() async {
-    if (!_isModelLoaded) {
+    if (!_isModelLoaded && _interpreter == null) {
       await loadModel();
     }
-    // إذا فشل التحميل لسبب ما
     if (_interpreter == null) {
-      throw Exception('فشل تحميل نموذج التشخيص وهو غير متوفر.');
+      throw Exception('Diagnosis model failed to load and is unavailable.');
     }
   }
 
   @override
   Future<void> loadModel() async {
-    // لا تقم بإعادة التحميل إذا كان النموذج محملاً بالفعل
+    // Prevent concurrent loading attempts
     if (_interpreter != null) return;
 
     try {
-      // تحميل النموذج من مجلد الأصول (assets)
       _interpreter = await Interpreter.fromAsset(DiagnosisConstants.modelPath);
+      // Optional: Allocate tensors at loading time if needed by the model
+      // _interpreter?.allocateTensors();
       _isModelLoaded = true;
-      print("Diagnosis model loaded successfully."); // رسالة تأكيد للتحميل الناجح
+      print('Diagnosis model loaded successfully.');
     } catch (e) {
-      _isModelLoaded = false;
-      print("Error loading diagnosis model: $e"); // طباعة الخطأ لتصحيحه
-      // رمي استثناء مخصص لتوضيح سبب الفشل
-      throw Exception('فشل تحميل النموذج: $e');
+      _isModelLoaded = false; // Ensure flag is false on error
+      print('Error loading diagnosis model: $e');
+      // Re-throw a more specific exception if needed, or handle it later
+      throw Exception('Failed to load model: $e');
     }
   }
 
-  /// معالجة الصورة الأولية لتناسب متطلبات النموذج.
-  Float32List _preprocessImage(img_lib.Image image) {
-    // تغيير حجم الصورة إلى الأبعاد المطلوبة من قبل النموذج
+  // --- Image Preprocessing ---
+  // IMPORTANT: This function MUST match the preprocessing used during model training.
+  // This example assumes Float32 input, normalized to [0, 1], in RGB order.
+  // Adjust resolution, normalization, data type (Float32List/Uint8List), and color order (RGB/BGR)
+  // based on your specific model's requirements.
+  Float32List _preprocessImageFloat32(img_lib.Image image) {
     final resizedImage = img_lib.copyResize(
       image,
       width: DiagnosisConstants.imgWidth,
       height: DiagnosisConstants.imgHeight,
-      interpolation: img_lib.Interpolation.average, // طريقة الاستيفاء عند تغيير الحجم
+      interpolation: img_lib.Interpolation.average, // Or bilinear, cubic
     );
 
-    // إنشاء قائمة لتخزين بيانات البكسل كأرقام عشرية (float)
+    // Create a Float32List for the input tensor [1, H, W, C]
     final imageBytes = Float32List(
-        DiagnosisConstants.imgHeight * DiagnosisConstants.imgWidth * 3); // H x W x C
-    int pixelIndex = 0; // مؤشر لتتبع الموقع في القائمة المسطحة
+        1 * DiagnosisConstants.imgHeight * DiagnosisConstants.imgWidth * 3);
+    int pixelIndex = 0;
 
-    // المرور على كل بكسل في الصورة
     for (int y = 0; y < DiagnosisConstants.imgHeight; y++) {
       for (int x = 0; x < DiagnosisConstants.imgWidth; x++) {
         final pixel = resizedImage.getPixel(x, y);
-        // تطبيع قيم الألوان (RGB) لتكون بين 0.0 و 1.0
-        imageBytes[pixelIndex++] = pixel.r / 255.0; // قناة اللون الأحمر
-        imageBytes[pixelIndex++] = pixel.g / 255.0; // قناة اللون الأخضر
-        imageBytes[pixelIndex++] = pixel.b / 255.0; // قناة اللون الأزرق
+        // Normalize pixel values to [0, 1] and set in RGB order
+        imageBytes[pixelIndex++] = pixel.r / 255.0;
+        imageBytes[pixelIndex++] = pixel.g / 255.0;
+        imageBytes[pixelIndex++] = pixel.b / 255.0;
       }
     }
-    return imageBytes; // إرجاع القائمة المعالجة
+    return imageBytes;
   }
 
   @override
   Future<String> runDiagnosis(File imageFile) async {
-    // تأكد من تحميل النموذج أولاً
-    await _ensureModelLoaded();
+    await _ensureModelLoaded(); // Ensure the model is loaded
 
     try {
-      // قراءة بايتات الصورة من الملف
+      // 1. Read and Decode Image
       final imageBytes = await imageFile.readAsBytes();
-      // فك ترميز البايتات إلى كائن صورة باستخدام مكتبة image
       final img_lib.Image? decodedImage = img_lib.decodeImage(imageBytes);
       if (decodedImage == null) {
-        throw Exception('فشل في فك ترميز ملف الصورة.');
+        throw Exception('Failed to decode image file.');
       }
 
-      // معالجة الصورة للحصول على بيانات الإدخال للنموذج
-      final inputBytes = _preprocessImage(decodedImage);
-      // إعادة تشكيل القائمة المسطحة إلى تنسيق التنسور [1, H, W, C]
+      // 2. Preprocess Image
+      // Use the correct preprocessing function based on your model
+      final inputBytes = _preprocessImageFloat32(decodedImage);
+      // Reshape to match model input tensor shape [1, height, width, channels]
       final input = inputBytes.reshape(
           [1, DiagnosisConstants.imgHeight, DiagnosisConstants.imgWidth, 3]);
 
-      // تحديد شكل مصفوفة الإخراج المتوقعة من النموذج [1, عدد_الفئات]
+      // 3. Prepare Output Tensor
+      // Shape should be [1, number_of_classes]
       final outputShape = [1, DiagnosisConstants.classMapping.length];
-      // إنشاء قائمة لتلقي مخرجات النموذج (تأكد من تطابق نوع البيانات Float32)
-      // يمكن استخدام Float32List مباشرة هنا أيضًا
+      // Initialize output tensor (e.g., with zeros)
       final output = List.filled(outputShape[0] * outputShape[1], 0.0)
           .reshape(outputShape);
 
-      // تشغيل النموذج باستخدام المفسر
+      // 4. Run Inference
       _interpreter!.run(input, output);
 
-      // تفسير مخرجات النموذج للحصول على اسم الفئة المتوقعة
-      // output[0] يحتوي على قائمة الاحتمالات للفئة
-      return _getPredictedClass(output[0] as List<double>);
+      // 5. Postprocess Output
+      // Output[0] contains the list of probabilities for each class
+      final predictions = output[0] as List<double>;
+      int predictedClassIndex = 0;
+      double maxConfidence = 0.0;
 
+      for (int i = 0; i < predictions.length; i++) {
+        if (predictions[i] > maxConfidence) {
+          maxConfidence = predictions[i];
+          predictedClassIndex = i;
+        }
+      }
+
+      // 6. Get Class Name
+      final predictedClassName =
+          DiagnosisConstants.classMapping[predictedClassIndex];
+      if (predictedClassName == null) {
+        throw Exception(
+            'Predicted class index $predictedClassIndex is out of bounds for the defined class mapping.');
+      }
+
+      // Optional: Log confidence
+      print(
+          "Diagnosis Result - Raw: $predictedClassName, Confidence: ${maxConfidence.toStringAsFixed(3)}");
+
+      // Return the formatted name for display
+      return DiagnosisConstants.formatClassName(predictedClassName);
     } on Exception catch (e) {
-      // طباعة الخطأ للمساعدة في التصحيح
-      // ignore: avoid_print
-      print("حدث خطأ أثناء تشغيل التشخيص: $e");
-      // إعادة رمي الاستثناء ليتم التعامل معه في الطبقة الأعلى (Repository)
+      print("Error during diagnosis run: $e");
+      // Re-throw to be caught by the repository
       rethrow;
     } catch (e) {
-      // التعامل مع أي أخطاء غير متوقعة أخرى
-      print("حدث خطأ غير متوقع أثناء التشخيص: $e");
-      throw Exception('حدث خطأ غير متوقع أثناء التشخيص: $e');
+      print("Unexpected error during diagnosis run: $e");
+      throw Exception('An unexpected error occurred during diagnosis: $e');
     }
   }
-
-  /// ***-- تم الإصلاح --***
-  /// يحدد الفئة ذات الاحتمالية الأعلى من مخرجات النموذج.
-  String _getPredictedClass(List<double> predictions) {
-    // التحقق من أن قائمة التوقعات ليست فارغة
-    if (predictions.isEmpty) {
-      throw Exception('تم استلام مصفوفة توقعات فارغة من النموذج.');
-    }
-
-    int predictedClassIndex = 0; // فهرس الفئة المتوقعة
-    double maxConfidence = -1.0; // أعلى درجة ثقة (يتم تهيئتها بقيمة أقل من الصفر)
-
-    // البحث عن الفهرس ذي القيمة الأعلى (أعلى احتمال)
-    predictedClassIndex = predictions.indexWhere((confidence) => confidence == predictions.reduce((a, b) => a > b ? a : b));
-
-    // البحث عن معلومات الفئة باستخدام الفهرس في خريطة الفئات
-    final predictedClassInfo =
-        DiagnosisConstants.classMapping[predictedClassIndex];
-
-    if (predictedClassInfo == null) {
-      throw Exception('Invalid class index $predictedClassIndex in the class mapping.');
-    }
-
-    // استخراج الاسم باللغة الإنجليزية كنتيجة أساسية لمصدر البيانات هذا
-    final predictedClassNameEn = predictedClassInfo['en'];
-
-    // التحقق من وجود الاسم الإنجليزي
-    if (predictedClassNameEn == null || predictedClassNameEn.isEmpty) {
-        throw Exception(
-              'الاسم الإنجليزي غير موجود لفهرس الفئة المتوقعة $predictedClassIndex في خريطة الفئات.');
-    }
-
-    // ***-- السطر المضاف --***
-    // إرجاع اسم الفئة المتوقعة (باللغة الإنجليزية في هذه الحالة)
-    return predictedClassNameEn;
-  }
-
-  // يمكنك إضافة دالة لإغلاق المفسر عند عدم الحاجة إليه
-  // void dispose() {
-  //   _interpreter?.close();
-  //   _interpreter = null;
-  //   _isModelLoaded = false;
-  // }
 }

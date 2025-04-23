@@ -127,23 +127,13 @@ class _ManageCategoryPageState extends State<ManageCategoryPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final String title =
         _isEditing ? localizations.editCategory : localizations.addCategory;
 
     return Scaffold(
       appBar: CustomAppBar(title: title),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              theme.colorScheme.secondary.withOpacity(0.7),
-              theme.colorScheme.background,
-            ],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: AppGradients.pageBackground),
         child: Padding(
           padding: const EdgeInsets.all(AppConstants.defaultPadding),
           child: _CategoryForm(
@@ -183,7 +173,6 @@ class _CategoryForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Form(
       key: formKey,

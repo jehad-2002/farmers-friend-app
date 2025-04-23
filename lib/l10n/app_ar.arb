@@ -418,7 +418,6 @@
       }
     },
     "actions": "إجراءات",
-    "confirmLogout": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
-  "publicationDate": "تاريخ النشر",
-  "publicationDateDescription": "ملصق تاريخ النشر"
+    "confirmLogout": "هل أنت متأكد من رغبتك في تسجيل الخروج؟"
+  
 }

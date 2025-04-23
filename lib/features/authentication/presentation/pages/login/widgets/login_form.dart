@@ -1,4 +1,3 @@
-import 'package:farmersfriendapp/core/presentation/theme/app_styles.dart';
 import 'package:farmersfriendapp/features/authentication/presentation/pages/login/widgets/password_field.dart';
 import 'package:farmersfriendapp/features/authentication/presentation/pages/login/widgets/username_field.dart';
 import 'package:farmersfriendapp/features/authentication/presentation/pages/register/register_page.dart';
@@ -77,7 +76,6 @@ class _LoginFormState extends State<LoginForm> {
                                     _usernameController.text,
                                     _passwordController.text,
                                   );
-
                             }
                           },
                         ),
@@ -87,17 +85,10 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 TextButton(
                   onPressed: () => _navigateToRegister(context),
-                  child: Text(localizations.dontHaveAccount, 
-                  style: TextStyle(
-                            color: theme.hintColor,
+                  child: Text(localizations.dontHaveAccount, style: TextStyle(
+                            color: theme.primaryColorDark,
                             fontFamily: AppConstants.defaultFontFamily,
-                    // style: AppStyles.productTitleLarge(context)
-                      //      style: theme.textTheme.bodyMedium?.copyWith(
-                      // color: theme.colorScheme.primary,
-                      // fontFamily: theme.textTheme.bodyMedium?.fontFamily,)
-                          ),
-                          // ),
-                    ),
+                          ),),
                 ),
               ],
             ),

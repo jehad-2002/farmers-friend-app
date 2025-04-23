@@ -22,9 +22,9 @@ class ErrorMessage extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
-    final effectiveErrorStyle = AppStyles.errorText(context).copyWith(
-      fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-      color: theme.colorScheme.error.withOpacity(0.9), // Use theme's error color
+    final effectiveErrorStyle = AppStyles.errorText.copyWith(
+      fontFamily: AppConstants.defaultFontFamily,
+      color: AppConstants.errorColor.withOpacity(0.9),
     );
 
     return Padding(
@@ -35,7 +35,7 @@ class ErrorMessage extends StatelessWidget {
         children: [
           Icon(
             AppConstants.errorOutlineIcon,
-            color: theme.colorScheme.error.withOpacity(0.8), // Use theme's error color
+            color: theme.colorScheme.error.withOpacity(0.8),
             size: effectiveErrorStyle.fontSize! * 1.1,
           ),
           const SizedBox(width: AppConstants.smallPadding / 2.5),

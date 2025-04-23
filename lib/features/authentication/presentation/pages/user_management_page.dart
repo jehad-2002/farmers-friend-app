@@ -273,8 +273,8 @@ class _UserManagementPageState extends State<UserManagementPage> {
         AppConstants.accountTypeFarmer: localizations.farmer,
         AppConstants.accountTypeTrader: localizations.trader,
         AppConstants.accountTypeAgriculturalGuide: localizations.agriculturalGuide,
-        AppConstants.accountTypeAdmin: localizations.admin, // Maybe admin cannot be set this way
-        AppConstants.accountTypeVisitor: localizations.guestUser,
+        AppConstants.accountTypeAdmin: localizations.admin, //?? Maybe admin cannot be set this way
+     //   AppConstants.accountTypeVisitor: localizations.visitor,
      };
 
      showModalBottomSheet(
@@ -309,246 +309,212 @@ class _UserManagementPageState extends State<UserManagementPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: CustomAppBar(
-        title: localizations.manageUsers,
+        title: localizations.manageUsers, // Add localization key
         actions: [
-          IconButton(
-            tooltip: localizations.refresh,
-            onPressed: _isLoading ? null : () => _fetchUsers(),
-            icon: Icon(Icons.refresh, color: theme.iconTheme.color),
-          ),
+           // Refresh button
+           IconButton(
+              tooltip: localizations.refresh, // Add localization
+              onPressed: _isLoading ? null : () => _fetchUsers(),
+              icon: const Icon(Icons.refresh),
+            )
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              theme.colorScheme.secondary.withOpacity(0.7),
-              theme.colorScheme.background,
+         decoration:  BoxDecoration(gradient: AppGradients.pageBackground),
+         child: Column(
+            children: [
+               // --- Search Bar ---
+               Padding(
+                 padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                 child: CustomSearchBar(
+                    controller: _searchController,
+                    hintText: localizations.searchUsers, // Add localization
+                    onChanged: (_) => _filterUsers(), // Trigger filter on change
+                    onClear: _filterUsers, // Also filter when cleared
+                 ),
+               ),
+               // --- Content Area ---
+               Expanded(
+                  child: _buildContent(context, localizations),
+               ),
             ],
-          ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(AppConstants.defaultPadding),
-              child: CustomSearchBar(
-                controller: _searchController,
-                hintText: localizations.searchUsers,
-                onChanged: (_) => _filterUsers(),
-                onClear: _filterUsers,
-              ),
-            ),
-            Expanded(
-              child: _buildContent(context, localizations),
-            ),
-          ],
-        ),
+         ),
       ),
     );
   }
 
+  /// Builds the main content based on the loading/error/data state.
   Widget _buildContent(BuildContext context, AppLocalizations localizations) {
-    final theme = Theme.of(context);
-
     if (_isLoading) {
-      return Center(
-        child: LoadingIndicator(
-          text: localizations.loading,
-          isCentered: true,
-        ),
-      );
+      return Center(child: LoadingIndicator(text: localizations.loading,isCentered: true,));
     }
 
     if (_errorMessage != null) {
       return Center(
-        child: ErrorIndicator(
-          message: _errorMessage!,
-          onRetry: _fetchUsers,
-        ),
+          child: ErrorIndicator(
+              message: _errorMessage!,
+              onRetry: _fetchUsers,
+          )
       );
     }
 
     if (_filteredUsers.isEmpty) {
+       // Show different message if search is active vs. no users at all
       final message = _searchController.text.isNotEmpty
-          ? localizations.noMatchingUsersFound
-          : localizations.noUsersFound;
+           ? localizations.noMatchingUsersFound // Add localization
+           : localizations.noUsersFound; // Add localization
 
       return Center(
-        child: EmptyListIndicator(
-          message: message,
-          icon: Icons.people_outline,
-        ),
+          child: EmptyListIndicator(
+              message: message,
+              icon: Icons.people_outline,
+          )
       );
     }
 
+    // --- User List ---
     return RefreshIndicator(
-      onRefresh: () => _fetchUsers(showLoading: false),
-      color: theme.colorScheme.primary,
-      child: ListView.separated(
-        itemCount: _filteredUsers.length,
-        padding: const EdgeInsets.only(
-          left: AppConstants.defaultPadding,
-          right: AppConstants.defaultPadding,
-          bottom: AppConstants.largePadding,
+       onRefresh: () => _fetchUsers(showLoading: false), // Allow pull-to-refresh
+       color: AppConstants.primaryColor,
+       child: ListView.separated(
+          itemCount: _filteredUsers.length,
+          padding: const EdgeInsets.only(
+             left: AppConstants.defaultPadding,
+             right: AppConstants.defaultPadding,
+             bottom: AppConstants.largePadding, // Space at the bottom
+          ),
+          separatorBuilder: (_, __) => const SizedBox(height: AppConstants.defaultPadding / 1.5),
+          itemBuilder: (context, index) {
+            final user = _filteredUsers[index];
+            return _buildUserListItem(context, localizations, user);
+          },
         ),
-        separatorBuilder: (_, __) =>
-            const SizedBox(height: AppConstants.defaultPadding / 1.5),
-        itemBuilder: (context, index) {
-          final user = _filteredUsers[index];
-          return _buildUserListItem(context, localizations, user);
-        },
-      ),
     );
   }
 
+   /// Builds a single list item representing a user.
   Widget _buildUserListItem(BuildContext context, AppLocalizations localizations, User user) {
     final theme = Theme.of(context);
     final bool isActive = user.accountStatus == AppConstants.accountStatusActive;
     final String accountType = UserUtils.getAccountTypeName(user.accountType, localizations);
     final String statusText = UserUtils.getAccountStatusText(user.accountStatus, localizations);
-    final Color statusColor = isActive ? theme.colorScheme.secondary : theme.colorScheme.error;
+    final Color statusColor = isActive ? AppConstants.successColor : AppConstants.warningColor;
 
     return Card(
-      elevation: AppConstants.elevationLow,
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: Row(
-            children: [
-              UserProfileAvatar(
-                imagePath: user.profileImage,
-                radius: 28,
-                placeholderAsset: AppConstants.defaultUserProfileImagePath,
-                badge: buildUserTypeBadge(context, user.accountType),
-              ),
-              const SizedBox(width: AppConstants.defaultPadding),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user.name.isNotEmpty ? user.name : localizations.nameNotAvailable,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: theme.textTheme.bodyMedium?.color,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      user.username.isNotEmpty ? "@${user.username}" : user.phoneNumber,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.textTheme.bodySmall?.color,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: AppConstants.smallPadding / 2),
-                    Text(
-                      "$accountType • $statusText",
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: statusColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppConstants.smallPadding),
-              PopupMenuButton<String>(
-                icon: Icon(Icons.more_vert, color: theme.iconTheme.color?.withOpacity(0.7)),
-                tooltip: localizations.actions,
-                onSelected: (value) {
-                  if (value == 'status') {
-                    _showStatusChangeSheet(user);
-                  } else if (value == 'type') {
-                    _showTypeChangeSheet(user);
-                  } else if (value == 'delete' && _deleteUserUseCase != null) {
-                    _confirmAndDeleteUser(user);
-                  }
-                },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  PopupMenuItem<String>(
-                    value: 'status',
-                    child: ListTile(
-                      leading: Icon(
-                        isActive ? Icons.toggle_off_outlined : Icons.toggle_on_outlined,
-                        color: theme.iconTheme.color,
-                      ),
-                      title: Text(isActive ? localizations.deactivate : localizations.activate),
-                    ),
-                  ),
-                  PopupMenuItem<String>(
-                    value: 'type',
-                    child: ListTile(
-                      leading: Icon(Icons.switch_account_outlined, color: theme.iconTheme.color),
-                      title: Text(localizations.changeAccountTypeFor(user.name)),
-                    ),
-                  ),
-                  if (_deleteUserUseCase != null) ...[
-                    const PopupMenuDivider(),
-                    PopupMenuItem<String>(
-                      value: 'delete',
-                      child: ListTile(
-                        leading: Icon(Icons.delete_outline, color: theme.colorScheme.error),
-                        title: Text(
-                          localizations.delete,
-                          style: TextStyle(color: theme.colorScheme.error),
+       elevation: AppConstants.elevationLow,
+       margin: EdgeInsets.zero, // Let ListView handle spacing
+       shape: RoundedRectangleBorder(
+         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
+       ),
+       child: InkWell(
+          // Optional: Navigate to user detail/edit page on tap
+          // onTap: () { /* Navigate to detail page */ },
+          borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
+          child: Padding(
+            padding: const EdgeInsets.all(AppConstants.defaultPadding),
+            child: Row(
+              children: [
+                 // --- Avatar ---
+                 UserProfileAvatar(
+                   imagePath: user.profileImage,
+                   radius: 28,
+                   placeholderAsset: AppConstants.defaultUserProfileImagePath,
+                   badge: buildUserTypeBadge(context, user.accountType), // Show type badge
+                 ),
+                 const SizedBox(width: AppConstants.defaultPadding),
+                 // --- User Info ---
+                 Expanded(
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                        Text(
+                           user.name.isNotEmpty ? user.name : localizations.nameNotAvailable,
+                           style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppConstants.textColorPrimary,
+                              fontFamily: AppConstants.defaultFontFamily
+                           ),
+                           maxLines: 1,
+                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ],
+                         Text(
+                           user.username.isNotEmpty ? "@${user.username}" : user.phoneNumber, // Show username or phone
+                           style: theme.textTheme.bodyMedium?.copyWith(
+                              color: AppConstants.textColorSecondary,
+                              fontFamily: AppConstants.defaultFontFamily
+                           ),
+                           maxLines: 1,
+                           overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: AppConstants.smallPadding / 2),
+                         Text(
+                            "$accountType • $statusText", // Combine type and status
+                            style: theme.textTheme.bodySmall?.copyWith(
+                               color: statusColor, // Color code status
+                               fontWeight: FontWeight.w500,
+                               fontFamily: AppConstants.defaultFontFamily
+                            ),
+                         ),
+                     ],
+                   ),
+                 ),
+                 const SizedBox(width: AppConstants.smallPadding),
+                 // --- Action Menu ---
+                 PopupMenuButton<String>(
+                    icon: Icon(Icons.more_vert, color: AppConstants.brownColor.withOpacity(0.7)),
+                    tooltip: "Actions", // Add localization
+                    onSelected: (value) {
+                       if (value == 'status') {
+                          _showStatusChangeSheet(user);
+                       } else if (value == 'type') {
+                          _showTypeChangeSheet(user);
+                       } else if (value == 'delete' && _deleteUserUseCase != null) {
+                          _confirmAndDeleteUser(user);
+                       }
+                       // Add 'edit' option if you have an edit page
+                    },
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                       PopupMenuItem<String>(
+                          value: 'status',
+                          child: ListTile(
+                             leading: Icon(isActive ? Icons.toggle_off_outlined : Icons.toggle_on_outlined, color: AppConstants.brownColor),
+                             title: Text(isActive ? "Deactivate" : "Activate"), // Add localization
+                          ),
+                       ),
+                       PopupMenuItem<String>(
+                          value: 'type',
+                          child: ListTile(
+                              leading: Icon(Icons.switch_account_outlined, color: AppConstants.brownColor),
+                              title: Text("Change Type"), // Add localization
+                          ),
+                       ),
+                       // Optional: Edit action
+                       // PopupMenuItem<String>(
+                       //    value: 'edit',
+                       //    child: ListTile(
+                       //        leading: Icon(AppConstants.editIcon, color: AppConstants.iconColorDefault),
+                       //        title: Text(localizations.edit),
+                       //    ),
+                       // ),
+                       if (_deleteUserUseCase != null) ...[ // Show delete only if enabled
+                          const PopupMenuDivider(),
+                          PopupMenuItem<String>(
+                             value: 'delete',
+                             child: ListTile(
+                                leading: Icon(AppConstants.deleteIcon, color: AppConstants.errorColor),
+                                title: Text(localizations.delete, style: TextStyle(color: AppConstants.errorColor)),
+                             ),
+                          ),
+                       ]
+                    ],
+                 )
+              ],
+            ),
           ),
-        ),
-      ),
+       ),
     );
   }
 
 }
-
-// --- Localization Keys to Add ---
-/*
-"manageUsers": "Manage Users",
-"searchUsers": "Search by name, username, phone...",
-"refresh": "Refresh",
-"noUsersFound": "No users found in the system.",
-"noMatchingUsersFound": "No users found matching your search.",
-"changeStatusFor": "Change Status for {name}",
-"@changeStatusFor": { "placeholders": { "name": {} } },
-"changeAccountTypeFor": "Change Account Type for {name}",
-"@changeAccountTypeFor": { "placeholders": { "name": {} } },
-"activate": "Activate",
-"deactivate": "Deactivate",
-"userStatusUpdated": "User '{name}' status updated.",
-"@userStatusUpdated": { "placeholders": { "name": {} } },
-"userTypeUpdated": "User '{name}' type updated.",
-"@userTypeUpdated": { "placeholders": { "name": {} } },
-"userUpdateFailed": "Failed to update user '{name}'.",
-"@userUpdateFailed": { "placeholders": { "name": {} } },
-"deleteUserConfirmation": "Delete user '{name}'? This action cannot be undone.",
-"@deleteUserConfirmation": { "placeholders": { "name": {} } },
-"userDeleted": "User '{name}' deleted.",
-"@userDeleted": { "placeholders": { "name": {} } },
-"userDeletionFailed": "Failed to delete user '{name}'.",
-"@userDeletionFailed": { "placeholders": { "name": {} } },
-"actions": "Actions",
-*/
-
-// --- Don't forget to add 'confirmLogout' key mentioned in UserProfilePage ---
-/*
- "confirmLogout": "Are you sure you want to log out?",
-*/

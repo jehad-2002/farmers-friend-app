@@ -66,18 +66,15 @@ class _CityInputFieldState extends State<CityInputField> {
           height: 58,
           child: IconButton(
             icon: const Icon(AppConstants.searchIcon),
-            color: theme.colorScheme.onPrimary, // Use theme's onPrimary color
+            color: theme.primaryColor,
             tooltip: localizations.search,
             padding: const EdgeInsets.all(12),
             style: IconButton.styleFrom(
-              minimumSize: const Size(48, 48),
-              backgroundColor: theme.colorScheme.primary.withOpacity(0.1), // Use theme's primary color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  AppConstants.borderRadiusMedium,
-                ),
-              ),
-            ),
+                minimumSize: const Size(48, 48),
+                backgroundColor: theme.primaryColor.withOpacity(0.1),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        AppConstants.borderRadiusMedium))),
             onPressed: widget.enabled ? _submitCity : null,
           ),
         )

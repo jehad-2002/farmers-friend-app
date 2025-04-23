@@ -25,7 +25,6 @@ class UserProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-final theme = Theme.of(context);
     return Center(
       child: Stack(
         clipBehavior: Clip.none,
@@ -35,15 +34,10 @@ final theme = Theme.of(context);
             height: radius * 2,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-color: borderColor == AppConstants.whiteColor
-                    ? theme.colorScheme.onBackground
-: borderColor,
-width: borderWidth,
-),
+              border: Border.all(color: borderColor, width: borderWidth),
               boxShadow: [
                 BoxShadow(
-                  color: theme.shadowColor.withOpacity(0.15),
+                  color: Colors.black.withOpacity(0.15),
                   spreadRadius: 0.5,
                   blurRadius: 3,
                   offset: const Offset(0, 1),

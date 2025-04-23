@@ -192,7 +192,7 @@ class _CropListPageState extends State<CropListPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.colorScheme.primary,
+        backgroundColor: theme.primaryColor,
         foregroundColor: theme.colorScheme.onPrimary,
         tooltip: localizations.addCrop,
         onPressed: _isLoading ? null : () => _navigateManageCrop(),
@@ -202,8 +202,6 @@ class _CropListPageState extends State<CropListPage> {
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations localizations) {
-    final theme = Theme.of(context);
-
     if (_isLoading) {
       return const LoadingIndicator(isCentered: true);
     }
@@ -226,8 +224,8 @@ class _CropListPageState extends State<CropListPage> {
 
     return RefreshIndicator(
       onRefresh: () => _loadInitialData(showLoading: false),
-      color: theme.colorScheme.primary,
-      backgroundColor: theme.colorScheme.background,
+      color: Theme.of(context).primaryColor,
+      backgroundColor: AppConstants.backgroundColor,
       child: CropList(
         crops: filteredCrops,
         onItemTap: (crop) => _navigateManageCrop(crop: crop),

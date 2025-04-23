@@ -16,7 +16,6 @@ class ErrorIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -27,26 +26,24 @@ class ErrorIndicator extends StatelessWidget {
           children: [
             Icon(
               AppConstants.errorOutlineIcon,
-              color: theme.colorScheme.error.withOpacity(0.8), // Use theme's error color
+              color: AppConstants.errorColor.withOpacity(0.8),
               size: 55,
             ),
             const SizedBox(height: AppConstants.defaultPadding / 2),
             Text(
               localizations.errorOccurred,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.error, // Use theme's error color
-                fontWeight: FontWeight.w500,
-                fontFamily: AppConstants.defaultFontFamily,
-              ),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: AppConstants.errorColor,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: AppConstants.defaultFontFamily),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppConstants.smallPadding),
             Text(
               message,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodyMedium?.color?.withOpacity(0.9), // Use theme's bodyMedium color
-                fontFamily: AppConstants.defaultFontFamily,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppConstants.textColorSecondary.withOpacity(0.9),
+                  fontFamily: AppConstants.defaultFontFamily),
               textAlign: TextAlign.center,
             ),
             if (onRetry != null) ...[
@@ -54,8 +51,8 @@ class ErrorIndicator extends StatelessWidget {
               AppButton(
                 text: localizations.retry,
                 onPressed: onRetry!,
-                backgroundColor: theme.colorScheme.secondary, // Use theme's secondary color
-                foregroundColor: theme.colorScheme.onSecondary, // Use theme's onSecondary color
+                backgroundColor: AppConstants.secondaryColor,
+                foregroundColor: AppConstants.primaryColorDark,
                 minWidth: 110,
               ),
             ],

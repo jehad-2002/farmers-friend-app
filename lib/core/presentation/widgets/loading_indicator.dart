@@ -11,7 +11,6 @@ class LoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final loadingText = text ?? localizations.loading;
 
     Widget content = Column(
@@ -19,16 +18,15 @@ class LoadingIndicator extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CircularProgressIndicator(
-            color: theme.textTheme.bodyMedium?.color, // Use theme's bodyMedium color
+          color: AppConstants.primaryColorDark,
         ),
         const SizedBox(height: 12),
         Text(
           loadingText,
           style: TextStyle(
-            fontFamily: AppConstants.defaultFontFamily, // Use AppConstants font
-            color: theme.textTheme.bodyMedium?.color, // Use theme's bodyMedium color
-            fontSize: 14,
-          ),
+              fontFamily: AppConstants.defaultFontFamily,
+              color: AppConstants.textColorSecondary,
+              fontSize: 14),
         ),
       ],
     );

@@ -34,48 +34,48 @@ class AccountTypeDropdown extends StatelessWidget {
     final InputDecoration decoration = InputDecoration(
       labelText: labelText ?? localizations.accountType,
       hintText: labelText ?? localizations.accountType,
-      hintStyle: theme.textTheme.bodyMedium?.copyWith(
+      hintStyle: TextStyle(
         color: enabled
-            ? theme.hintColor.withOpacity(0.6)
-            : theme.disabledColor,
-        fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+            ? AppConstants.textColorSecondary.withOpacity(0.6)
+            : AppConstants.greyColor,
+        fontFamily: AppConstants.defaultFontFamily,
       ),
       prefixIcon: Icon(
         Icons.person_outline,
-        color: enabled ? theme.iconTheme.color : theme.disabledColor,
+        color: enabled ? AppConstants.brownColor : AppConstants.greyColor,
         size: 22,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.dividerColor.withOpacity(0.5),
+          color: Colors.grey.withOpacity(0.5),
           width: 1,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.dividerColor.withOpacity(0.5),
+          color: Colors.grey.withOpacity(0.5),
           width: 1,
         ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.dividerColor.withOpacity(0.6) ,// Use theme's divider color
+          color: AppConstants.primaryColorDark,
           width: 1.3,
         ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.disabledColor.withOpacity(0.3),
+          color: Colors.grey.withOpacity(0.3),
           width: 1,
         ),
       ),
       filled: true,
       fillColor: enabled
-          ? theme.colorScheme.surface.withOpacity(0.9)
+          ? AppConstants.cardBackgroundColor.withOpacity(0.9)
           : theme.disabledColor.withOpacity(0.1),
       contentPadding: const EdgeInsets.symmetric(
         vertical: AppConstants.defaultPadding * 0.8,
@@ -96,9 +96,7 @@ class AccountTypeDropdown extends StatelessWidget {
             value: type,
             child: Text(
               UserUtils.getAccountTypeName(type, localizations),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-              ),
+              style: AppStyles.descriptionBody,
               overflow: TextOverflow.ellipsis,
             ),
           );
@@ -111,9 +109,9 @@ class AccountTypeDropdown extends StatelessWidget {
             (initialValue != null && accountTypes.contains(initialValue))
                 ? Text(
                     UserUtils.getAccountTypeName(initialValue!, localizations),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.disabledColor,
-                      fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+                    style: TextStyle(
+                      color: AppConstants.textColorSecondary,
+                      fontFamily: AppConstants.defaultFontFamily,
                     ),
                   )
                 : null,

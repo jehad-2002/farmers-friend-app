@@ -20,12 +20,11 @@ class SharedFilterBar extends StatefulWidget {
 class _SharedFilterBarState extends State<SharedFilterBar> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final localizations = AppLocalizations.of(context)!;
 
     return PopupMenuButton<FilterType>(
       icon: Icon(AppConstants.filterListIcon,
-          color: theme.iconTheme.color?.withOpacity(0.7)),
+          color: AppConstants.primaryColorDark.withOpacity(0.7)),
       tooltip: localizations.filter,
       onSelected: widget.onFilterChanged,
       initialValue: widget.currentFilter,
@@ -40,12 +39,12 @@ class _SharedFilterBarState extends State<SharedFilterBar> {
               Text(localizations.noFilter,
                   style: TextStyle(
                       fontFamily: AppConstants.defaultFontFamily,
-                      color: theme.textTheme.bodyMedium?.color)),
+                      color: AppConstants.textColorSecondary)),
               if (widget.currentFilter == FilterType.none)
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.check,
-                      color: theme.colorScheme.primary, size: 20),
+                      color: AppConstants.primaryColorDark, size: 20),
                 ),
             ],
           ),
@@ -58,12 +57,12 @@ class _SharedFilterBarState extends State<SharedFilterBar> {
               Text(localizations.sortNewestFirst,
                   style: TextStyle(
                       fontFamily: AppConstants.defaultFontFamily,
-                      color: theme.textTheme.bodyMedium?.color)),
+                      color: AppConstants.textColorPrimary)),
               if (widget.currentFilter == FilterType.sortByDateNewestFirst)
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.check,
-                      color: theme.colorScheme.primary, size: 20),
+                      color: AppConstants.primaryColorDark, size: 20),
                 ),
             ],
           ),
@@ -75,12 +74,12 @@ class _SharedFilterBarState extends State<SharedFilterBar> {
               Text(localizations.sortOldestFirst,
                   style: TextStyle(
                       fontFamily: AppConstants.defaultFontFamily,
-                      color: theme.textTheme.bodyMedium?.color)),
+                      color: AppConstants.textColorPrimary)),
               if (widget.currentFilter == FilterType.sortByDateOldestFirst)
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.check,
-                      color: theme.colorScheme.primary, size: 20),
+                      color: AppConstants.primaryColorDark, size: 20),
                 ),
             ],
           ),
@@ -93,12 +92,12 @@ class _SharedFilterBarState extends State<SharedFilterBar> {
               Text(localizations.filterByCrop,
                   style: TextStyle(
                       fontFamily: AppConstants.defaultFontFamily,
-                      color: theme.textTheme.bodyMedium?.color)),
+                      color: AppConstants.textColorPrimary)),
               if (widget.currentFilter == FilterType.filterByCrop)
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.check,
-                      color: theme.colorScheme.primary, size: 20),
+                      color: AppConstants.primaryColorDark, size: 20),
                 ),
             ],
           ),

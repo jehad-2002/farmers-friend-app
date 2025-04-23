@@ -20,19 +20,16 @@ class LanguageSelectionDialog extends StatelessWidget {
 
     // استخدام أنماط الحوار من السمة
     final titleStyle = theme.dialogTheme.titleTextStyle ?? theme.textTheme.titleLarge;
-    final listTileTextStyle = theme.textTheme.titleMedium;
+    final listTileTextStyle = theme.textTheme.titleMedium; // أو أي نمط مناسب آخر
 
     return Dialog(
       // استخدام شكل الحوار من السمة
       shape: theme.dialogTheme.shape ?? RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
       ),
-      backgroundColor: theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface, // Use theme's surface color
+      backgroundColor: theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: AppConstants.defaultPadding,
-          horizontal: AppConstants.smallPadding,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: AppConstants.defaultPadding, horizontal: AppConstants.smallPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min, // لجعل العمود يأخذ أقل مساحة ممكنة
           children: [
@@ -41,20 +38,14 @@ class LanguageSelectionDialog extends StatelessWidget {
               child: Text(
                 localizations.chooseLanguage, // استخدام النص المترجم
                 textAlign: TextAlign.center,
-                style: titleStyle?.copyWith(
-                  color: theme.colorScheme.onSurface, // Use theme's onSurface color
-                  fontFamily: AppConstants.defaultFontFamily, // Use AppConstants font
-                ),
+                style: titleStyle,
               ),
             ),
             const Divider(), // فاصل بصري
             ListTile(
               title: Text(
                 "English", // يمكن ترك اسم اللغة كما هو أو ترجمته إذا أردت
-                style: listTileTextStyle?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color, // Use theme's bodyMedium color
-                  fontFamily: AppConstants.defaultFontFamily,
-                ),
+                style: listTileTextStyle,
               ),
               onTap: () {
                 onLocaleSelected(const Locale('en'));
@@ -64,10 +55,7 @@ class LanguageSelectionDialog extends StatelessWidget {
             ListTile(
               title: Text(
                 "العربية", // يمكن ترك اسم اللغة كما هو أو ترجمته إذا أردت
-                style: listTileTextStyle?.copyWith(
-                  color: theme.textTheme.bodyMedium?.color, // Use theme's bodyMedium color
-                  fontFamily: AppConstants.defaultFontFamily,
-                ),
+                style: listTileTextStyle,
               ),
               onTap: () {
                 onLocaleSelected(const Locale('ar'));

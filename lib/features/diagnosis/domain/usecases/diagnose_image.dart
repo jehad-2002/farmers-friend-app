@@ -1,20 +1,17 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart'; // Or fpdartz
-import 'package:farmersfriendapp/core/errors/failures.dart'; // تأكد من صحة هذا المسار
-import 'package:farmersfriendapp/features/diagnosis/domain/repositories/diagnosis_repository.dart'; // تأكد من صحة هذا المسار
+import 'package:farmersfriendapp/core/errors/failures.dart';
+import 'package:farmersfriendapp/features/diagnosis/domain/repositories/diagnosis_repository.dart';
 
-/// حالة الاستخدام لتشخيص صورة.
-/// تفصل منطق العمل عن تفاصيل التنفيذ في الواجهة أو مصادر البيانات.
+// Use case for diagnosing an image
 class DiagnoseImage {
-  final DiagnosisRepository repository; // الاعتماد على الواجهة وليس التنفيذ
+  final DiagnosisRepository repository;
 
   DiagnoseImage(this.repository);
 
-  /// يجعل الكلاس قابلاً للاستدعاء كدالة.
-  /// يقوم بتمرير الطلب إلى المستودع (Repository).
+  // Makes the class callable like a function
   Future<Either<Failure, String>> call(File imageFile) async {
-    // يمكن إضافة تحقق أساسي هنا إذا لزم الأمر (مثل حجم الملف)
-    // استدعاء الدالة في المستودع
+    // Basic validation could be added here if needed (e.g., file size)
     return await repository.diagnoseImage(imageFile);
   }
 }

@@ -63,7 +63,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Either<Failure, List<guidelineImage>>> getImagesForProduct(
+  Future<Either<Failure, List<ProductImage>>> getImagesForProduct(
       int productId) async {
     try {
       final productImages =
@@ -75,8 +75,8 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Either<Failure, guidelineImage>> addImageToProduct(
-      guidelineImage productImage) async {
+  Future<Either<Failure, ProductImage>> addImageToProduct(
+      ProductImage productImage) async {
     try {
       final newProductImage =
           await localDataSource.addImageToProduct(productImage);

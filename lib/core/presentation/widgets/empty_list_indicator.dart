@@ -17,7 +17,6 @@ class EmptyListIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Center(
       child: Padding(
@@ -30,17 +29,15 @@ class EmptyListIndicator extends StatelessWidget {
               Icon(
                 icon,
                 size: 60,
-                color: theme.iconTheme.color?.withOpacity(0.7) ??
-                    AppConstants.brownLightColor,
+                color: AppConstants.brownColor,
               ),
               const SizedBox(height: AppConstants.defaultPadding),
             ],
             Text(
               message ?? localizations.noData,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
-                fontFamily: AppConstants.defaultFontFamily,
-              ),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: AppConstants.textColorSecondary.withOpacity(0.8),
+                  fontFamily: AppConstants.defaultFontFamily),
               textAlign: TextAlign.center,
             ),
             if (action != null) ...[

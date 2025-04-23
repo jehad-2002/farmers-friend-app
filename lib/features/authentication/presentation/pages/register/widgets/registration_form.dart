@@ -117,16 +117,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       builder: (context, state) {
         return Scaffold(
           body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  theme.colorScheme.secondary.withOpacity(0.7),
-                  theme.colorScheme.background,
-                ],
-              ),
-            ),
+            decoration: BoxDecoration(gradient: AppGradients.pageBackground),
             child: Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
@@ -233,31 +224,24 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         borderRadius: BorderRadius.circular(AppConstants.borderRadiusCircular),
                         child: InputDecorator(
                           decoration: InputDecoration(
-                            iconColor: theme.disabledColor,
                             labelText: localizations.dateOfBirth,
                             labelStyle: TextStyle(
-                              color: state.status == RegisterStatus.loading
-                                  ? theme.disabledColor
-                                  : theme.disabledColor,
-                              fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+                              color: state.status == RegisterStatus.loading ? AppConstants.greyColor : theme.primaryColorDark,
+                              fontFamily: AppConstants.defaultFontFamily,
                             ),
                             prefixIcon: Icon(
                               AppConstants.calendarTodayIcon,
-                              color: state.status == RegisterStatus.loading
-                                 ? theme.iconTheme.color : theme.disabledColor,
+                              color: state.status == RegisterStatus.loading ? AppConstants.greyColor : theme.primaryColorDark,
                               size: 22,
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(AppConstants.borderRadiusCircular),
-                              borderSide:  BorderSide(
-          color: theme.dividerColor.withOpacity(0.6) ,// Use theme's divider color
-          width: 1.3,
-        ),
+                              borderSide: BorderSide.none,
                             ),
                             filled: true,
                             fillColor: state.status == RegisterStatus.loading
-                                ? theme.disabledColor
-                                : theme.colorScheme.surface.withOpacity(0.8),
+                                ? theme.disabledColor.withOpacity(0.1)
+                                : AppConstants.cardBackgroundColor.withOpacity(0.8),
                             contentPadding: const EdgeInsets.symmetric(
                               vertical: AppConstants.defaultPadding * 0.9,
                               horizontal: AppConstants.defaultPadding,
@@ -270,11 +254,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             style: TextStyle(
                               fontSize: 16,
                               color: state.status == RegisterStatus.loading
-                                  ? theme.disabledColor
-                                  : (state.selectedDate != null
-                                      ? theme.textTheme.bodyMedium?.color
-                                      : theme.cardColor),
-                              fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+                                  ? AppConstants.greyColor
+                                  : (state.selectedDate != null ? AppConstants.textColorPrimary : AppConstants.greyColor),
+                              fontFamily: AppConstants.defaultFontFamily,
                             ),
                           ),
                         ),
@@ -302,9 +284,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         onPressed: state.status == RegisterStatus.loading ? null : () => _navigateToLogin(context),
                         child: Text(
                           localizations.alreadyHaveAccount,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.hintColor,
-                            fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+                          style: TextStyle(
+                            color: theme.primaryColorDark,
+                            fontFamily: AppConstants.defaultFontFamily,
                           ),
                         ),
                       ),

@@ -1,9 +1,7 @@
-// يمكن استخدام هذا الكلاس إذا كنت تريد تمثيل نتيجة التشخيص ككائن بدلاً من مجرد سلسلة نصية
-// حاليًا، الكود يستخدم سلسلة نصية مباشرة، لذا هذا الكلاس غير مستخدم بشكل فعال في التدفق الحالي.
 class PlantDisease {
-  final String name; // اسم المرض (أو "صحي")
-  final int? index; // الفهرس المقابل في النموذج (اختياري)
-  final String? description; // وصف إضافي (اختياري)
+  final String name;
+  final int? index; // Optional: If you want to store the index
+  final String? description; // Optional: For more information
 
   PlantDisease({required this.name, this.index, this.description});
 

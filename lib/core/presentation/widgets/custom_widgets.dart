@@ -15,13 +15,10 @@ class LanguageSelectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
       ),
-      backgroundColor: theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface,
       child: Container(
         padding: const EdgeInsets.all(AppConstants.defaultPadding),
         child: Column(
@@ -31,9 +28,9 @@ class LanguageSelectionDialog extends StatelessWidget {
               'Choose your language/اختر لغتك',
               textAlign: TextAlign.center,
               style: titleStyle ??
-                  theme.textTheme.titleLarge?.copyWith(
+                  TextStyle(
                     fontSize: 19,
-                    color: theme.textTheme.titleLarge?.color,
+                    color: AppConstants.textColorPrimary,
                     fontWeight: FontWeight.w600,
                     fontFamily: AppConstants.defaultFontFamily,
                   ),
@@ -42,9 +39,12 @@ class LanguageSelectionDialog extends StatelessWidget {
             ListTile(
               title: Text(
                 "English",
-                style: listTileTextStyle ??
-                    theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.textTheme.bodyMedium?.color,
+                style: listTileTextStyle?.copyWith(
+                      color: AppConstants.textColorPrimary,
+                      fontFamily: AppConstants.defaultFontFamily,
+                    ) ??
+                    TextStyle(
+                      color: AppConstants.textColorPrimary,
                       fontFamily: AppConstants.defaultFontFamily,
                     ),
               ),
@@ -56,9 +56,12 @@ class LanguageSelectionDialog extends StatelessWidget {
             ListTile(
               title: Text(
                 "العربية",
-                style: listTileTextStyle ??
-                    theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.textTheme.bodyMedium?.color,
+                style: listTileTextStyle?.copyWith(
+                      color: AppConstants.textColorPrimary,
+                      fontFamily: AppConstants.defaultFontFamily,
+                    ) ??
+                    TextStyle(
+                      color: AppConstants.textColorPrimary,
                       fontFamily: AppConstants.defaultFontFamily,
                     ),
               ),

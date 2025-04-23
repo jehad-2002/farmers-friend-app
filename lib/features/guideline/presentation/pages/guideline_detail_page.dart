@@ -1,7 +1,8 @@
 import 'package:farmersfriendapp/core/models/guideline.dart';
 import 'package:farmersfriendapp/core/models/guideline_image.dart';
+import 'package:farmersfriendapp/core/presentation/theme/app_styles.dart';
 import 'package:farmersfriendapp/core/presentation/widgets/custom_app_bar.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/image_gallery.dart';
+import 'package:farmersfriendapp/core/presentation/widgets/image_gallery.dart'; // Use the ImageGallery
 import 'package:farmersfriendapp/core/presentation/widgets/loading_indicator.dart';
 import 'package:farmersfriendapp/core/service_locator.dart';
 import 'package:farmersfriendapp/core/utils/app_constants.dart';
@@ -23,7 +24,7 @@ class _GuidelineDetailPageState extends State<GuidelineDetailPage> {
   Guideline? _guideline;
   List<GuidelineImage> _images = [];
   String? _errorMessage;
-  bool _isLoading = true;
+  bool _isLoading = true; // Added loading state
 
   @override
   void initState() {
@@ -33,23 +34,24 @@ class _GuidelineDetailPageState extends State<GuidelineDetailPage> {
 
   Future<void> _loadGuidelineData() async {
     setState(() {
-      _isLoading = true;
+      _isLoading = true; // Set loading to true
       _errorMessage = null;
     });
 
     try {
       final guideline = await sl.guidelineLocalDataSource
-          .getGuidelinesWithImagesByUserId(widget.guidelineId);
+          .getGuidelinesWithImagesByUserId(
+              widget.guidelineId); // Changed to getGuidelineById
       if (mounted) {
         setState(() {
           _guideline = guideline.first.guideline;
           _images = guideline.first.images;
-          _isLoading = false;
+          _isLoading = false; // Set loading to false
         });
       } else {
         if (mounted) {
           setState(() {
-            _errorMessage = 'Guideline not found';
+            _errorMessage = 'Guideline not found'; // Use localized string
             _isLoading = false;
           });
         }
@@ -58,7 +60,7 @@ class _GuidelineDetailPageState extends State<GuidelineDetailPage> {
       if (mounted) {
         setState(() {
           _errorMessage =
-              "${AppLocalizations.of(context)!.errorLoadingData}: $e";
+              "${AppLocalizations.of(context)!.errorLoadingData}: $e"; // Use localized string
           _isLoading = false;
         });
       }
@@ -73,45 +75,42 @@ class _GuidelineDetailPageState extends State<GuidelineDetailPage> {
     return Scaffold(
       appBar: CustomAppBar(
         title: localizations.guidelineDetails,
-        backgroundColor: theme.colorScheme.primary,
-        iconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
+        backgroundColor:
+            AppConstants.primaryColorDark, // Consistent app bar style
+        iconTheme: IconThemeData(color: AppConstants.textOnPrimary),
       ),
-      body: _isLoading
+      body: _isLoading // Check loading status
           ? const Center(
-              child: LoadingIndicator(),
+              child: LoadingIndicator(), // Use loading indicator
             )
           : _errorMessage != null
               ? Center(
-                  child: Text(
-                    _errorMessage!,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.error,
-                    ),
-                  ),
+                  child: Text(_errorMessage!), // Show Error
                 )
               : _guideline == null
-                  ? Center(
-                      child: Text(
-                        localizations.guidelineNotFound(_errorMessage ?? ''),
-                        style: theme.textTheme.bodyMedium,
-                      ),
+                  ? const Center(
+                      child: Text('Guideline not found'), // Fallback
                     )
                   : SingleChildScrollView(
-                      padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                      padding: const EdgeInsets.all(
+                          AppConstants.defaultPadding), // Add padding
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // --- Image Gallery (Using the ImageGallery widget)---
                           if (_images.isNotEmpty)
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
+                              padding: const EdgeInsets.only(
+                                  bottom: 8.0), // Add spacing
                               child: ImageGallery(images: _images),
                             )
                           else
                             Container(
-                              height: 200,
+                              height: 200, // Or a more appropriate height
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.surface.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
+                                color: AppConstants.greyColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(AppConstants
+                                    .borderRadiusMedium), // Add rounded corners
                               ),
                               child: Center(
                                 child: Column(
@@ -119,43 +118,48 @@ class _GuidelineDetailPageState extends State<GuidelineDetailPage> {
                                   children: [
                                     Icon(
                                       Icons.image_not_supported_outlined,
-                                      color: theme.iconTheme.color?.withOpacity(0.6),
+                                      color: AppConstants.greyColor,
                                       size: 40,
                                     ),
                                     Text(
                                       localizations.noImagesAvailable,
-                                      style: theme.textTheme.bodyMedium?.copyWith(
-                                        color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
-                                      ),
+                                      style: TextStyle(
+                                          color:
+                                              AppConstants.textColorSecondary,
+                                          fontFamily:
+                                              AppConstants.defaultFontFamily),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          const SizedBox(height: AppConstants.defaultPadding),
+                          const SizedBox(
+                              height: AppConstants.defaultPadding), // Add space
+                          // --- Title ---
                           Text(
                             _guideline!.title,
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppStyles
+                                .sectionHeader, // Use a section header style
                           ),
                           const SizedBox(height: AppConstants.smallPadding),
+
+                          // --- Publication Date ---
                           if (_guideline!.publicationDate != null &&
                               _guideline!.publicationDate!.isNotEmpty)
                             Text(
-                              '${localizations.publicationDate}: ${AppDateUtils.formatSimpleDate(context, _guideline!.publicationDate!)}',
+                              '${localizations.noWeatherData}: ${AppDateUtils.formatSimpleDate(context, _guideline!.publicationDate!)}',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
-                              ),
+                                  color: AppConstants.textColorSecondary,
+                                  fontFamily: AppConstants.defaultFontFamily),
                             ),
                           if (_guideline!.publicationDate != null &&
                               _guideline!.publicationDate!.isNotEmpty)
                             const SizedBox(height: AppConstants.defaultPadding),
+
+                          // --- Guideline Text ---
                           Text(
                             _guideline!.guidanceText,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              height: 1.6,
-                            ),
+                            style: AppStyles.descriptionBody,
                           ),
                         ],
                       ),

@@ -8,10 +8,9 @@ import 'package:farmersfriendapp/core/utils/app_constants.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocProvider(
       create: (_) => LoginCubit(),
       child: Scaffold(
@@ -29,8 +28,8 @@ class LoginPage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                   theme.colorScheme.secondary.withOpacity(0.7),
-                  theme.colorScheme.background,
+                  AppConstants.secondaryColor.withOpacity(0.7),
+                  AppConstants.backgroundColor,
                 ],
               ),
             ),

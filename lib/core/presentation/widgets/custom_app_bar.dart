@@ -21,33 +21,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return SafeArea(
       child: AppBar(
         title: Text(
           title,
           style: titleTextStyle ??
-              theme.appBarTheme.titleTextStyle ?? // Use AppBarTheme's titleTextStyle
               TextStyle(
-                color: AppConstants.textOnPrimary, // Fallback to AppConstants
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+                color: AppConstants.whiteColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 21,
                 fontFamily: AppConstants.defaultFontFamily,
               ),
         ),
-        backgroundColor: backgroundColor ?? theme.appBarTheme.backgroundColor ?? AppConstants.primaryColor,
-        elevation: theme.appBarTheme.elevation ?? 1, // Use AppBarTheme's elevation
+        backgroundColor: backgroundColor ?? AppConstants.primaryColorDark,
+        elevation: 1,
         centerTitle: true,
-        shape: theme.appBarTheme.shape ??
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(AppConstants.borderRadiusSmall),
-              ),
-            ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(AppConstants.borderRadiusSmall),
+          ),
+        ),
         automaticallyImplyLeading: showBackButton,
         actions: actions,
-        iconTheme: iconTheme ?? theme.appBarTheme.iconTheme ?? IconThemeData(color: AppConstants.textOnPrimary),
+        iconTheme:
+            iconTheme ?? const IconThemeData(color: AppConstants.whiteColor),
       ),
     );
   }

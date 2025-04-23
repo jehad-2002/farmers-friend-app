@@ -54,46 +54,50 @@ class AppTextField extends StatelessWidget {
     final theme = Theme.of(context);
 
     final effectiveLabelStyle = (enabled
-            ? AppStyles.inputLabel(context)
-            : AppStyles.inputLabel(context).copyWith(color: theme.disabledColor))
-        .copyWith(fontFamily: theme.textTheme.bodyMedium?.fontFamily);
+            ? AppStyles.inputLabel
+            : AppStyles.inputLabel.copyWith(color: AppConstants.greyColor))
+        .copyWith(fontFamily: AppConstants.defaultFontFamily);
     final effectiveTextStyle = theme.textTheme.bodyLarge?.copyWith(
-          color: enabled ? theme.textTheme.bodyLarge?.color : theme.disabledColor,
-          fontFamily: theme.textTheme.bodyMedium?.fontFamily,
+          color:
+              enabled ? AppConstants.textColorPrimary : AppConstants.greyColor,
+          fontFamily: AppConstants.defaultFontFamily,
         ) ??
         TextStyle(
-          color: enabled ? theme.textTheme.bodyLarge?.color : theme.disabledColor,
-          fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-        );
-    final effectiveHintStyle = AppStyles.hintText(context);
-    final effectiveErrorStyle = AppStyles.errorText(context);
+            color: enabled
+                ? AppConstants.textColorPrimary
+                : AppConstants.greyColor,
+            fontFamily: AppConstants.defaultFontFamily);
+    final effectiveHintStyle =
+        AppStyles.hintText.copyWith(fontFamily: AppConstants.defaultFontFamily);
+    final effectiveErrorStyle = AppStyles.errorText
+        .copyWith(fontFamily: AppConstants.defaultFontFamily);
 
     final effectiveIconColor =
-        enabled ? theme.iconTheme.color : theme.disabledColor;
-    final effectiveFillColor = fillColor ?? 
+        enabled ? AppConstants.brownColor : AppConstants.greyColor;
+    final effectiveFillColor = fillColor ??
         (enabled
-            ? theme.colorScheme.surface.withOpacity(0.8) // Use theme's surface color
+            ? AppConstants.whiteColor.withOpacity(0.8)
             : theme.disabledColor.withOpacity(0.1));
 
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
       borderSide: BorderSide(
           color: enabled
-              ? theme.dividerColor.withOpacity(0.6) // Use theme's divider color
+              ? AppConstants.brownColor.withOpacity(0.6)
               : Colors.transparent,
           width: 1),
     );
 
     final focusedBorder = border.copyWith(
       borderSide: BorderSide(
-        color: theme.colorScheme.primary, // Use theme's primary color
+        color: AppConstants.primaryColorDark,
         width: 1.3,
       ),
     );
 
     final errorBorder = border.copyWith(
       borderSide: BorderSide(
-        color: theme.colorScheme.error, // Use theme's error color
+        color: AppConstants.errorColor,
         width: 1.3,
       ),
     );
@@ -115,7 +119,7 @@ class AppTextField extends StatelessWidget {
       inputFormatters: inputFormatters,
       textInputAction: textInputAction,
       onFieldSubmitted: onFieldSubmitted,
-      cursorColor: theme.colorScheme.primary, // Use theme's primary color
+      cursorColor: AppConstants.primaryColorDark,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: effectiveLabelStyle,

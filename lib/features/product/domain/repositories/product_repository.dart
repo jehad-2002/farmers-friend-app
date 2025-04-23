@@ -10,10 +10,10 @@ abstract class ProductRepository {
   Future<Either<Failure, Product>> addProduct(Product product);
   Future<Either<Failure, Product>> updateProduct(Product product);
   Future<Either<Failure, void>> deleteProduct(int productId);
-  Future<Either<Failure, List<guidelineImage>>> getImagesForProduct(
+  Future<Either<Failure, List<ProductImage>>> getImagesForProduct(
       int productId);
-  Future<Either<Failure, guidelineImage>> addImageToProduct(
-      guidelineImage productImage);
+  Future<Either<Failure, ProductImage>> addImageToProduct(
+      ProductImage productImage);
   Future<Either<Failure, void>> deleteProductImage(int imageId);
   Future<Either<Failure, List<ProductWithImages>>> getAllProductsWithImages();
   Future<Either<Failure, List<ProductWithImages>>> getProductsWithImagesByUser(

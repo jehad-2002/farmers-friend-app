@@ -18,21 +18,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
-  bool _isDarkMode = false;
 
   @override
   void initState() {
     super.initState();
-    _loadPreferences();
+    _loadLocale();
   }
 
-  Future<void> _loadPreferences() async {
+  Future<void> _loadLocale() async {
     final prefs = await SharedPreferences.getInstance();
     final savedLocale = prefs.getString(AppConstants.prefsLocaleKey);
-    final savedThemeMode = prefs.getBool('isDarkMode') ?? false;
     setState(() {
       _locale = savedLocale != null ? Locale(savedLocale) : null;
-      _isDarkMode = savedThemeMode;
     });
   }
 
@@ -48,25 +45,17 @@ class _MyAppState extends State<MyApp> {
     await prefs.setString(AppConstants.prefsLocaleKey, locale.languageCode);
   }
 
-  void _toggleTheme() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
-    _saveThemePreference();
-  }
-
-  Future<void> _saveThemePreference() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isDarkMode', _isDarkMode);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'صديق المزارعين',
-      theme: AppConstants.lightTheme, // Apply light theme
-      darkTheme: AppConstants.darkTheme, // Apply dark theme
-      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light, // Toggle between themes
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -81,12 +70,5 @@ void changeLanguage(BuildContext context, Locale newLocale) {
   final appState = context.findAncestorStateOfType<_MyAppState>();
   if (appState != null) {
     appState._setLocale(newLocale);
-  }
-}
-
-void toggleTheme(BuildContext context) {
-  final appState = context.findAncestorStateOfType<_MyAppState>();
-  if (appState != null) {
-    appState._toggleTheme();
   }
 }

@@ -6,6 +6,7 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.0.0 <4.0.0' # It is better to use this.
 
+
 dependencies:
   animate_do: ^4.2.0
   cached_network_image: ^3.4.1
@@ -13,6 +14,7 @@ dependencies:
   crypto: ^3.0.3
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
+  dio: ^5.8.0+1
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -36,6 +38,7 @@ dependencies:
   shimmer: ^3.0.0
   smooth_page_indicator: ^1.2.1
   sqflite: ^2.3.2
+  supabase_flutter: ^2.8.4
   tflite_flutter: ^0.11.0
   timeago: ^3.7.0
   url_launcher: ^6.3.1

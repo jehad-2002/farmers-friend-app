@@ -40,9 +40,9 @@ class _ManageProductPageState extends State<ManageProductPage> {
   late final TextEditingController _priceController;
 
   int? _selectedCropId;
-  List<guidelineImage> _existingImages = [];
+  List<ProductImage> _existingImages = [];
   final List<File> _newImageFiles = [];
-  final List<guidelineImage> _imagesToRemove = [];
+  final List<ProductImage> _imagesToRemove = [];
   int? _currentUserId;
 
   bool _isLoadingData = true;
@@ -139,7 +139,7 @@ class _ManageProductPageState extends State<ManageProductPage> {
   }
 
   void _handleExistingImageRemoved(dynamic existingImageSource) {
-    if (existingImageSource is guidelineImage) {
+    if (existingImageSource is ProductImage) {
       setState(() {
         _existingImages
             .removeWhere((img) => img.imageId == existingImageSource.imageId);
@@ -223,7 +223,7 @@ class _ManageProductPageState extends State<ManageProductPage> {
     final futures = _newImageFiles.map((f) async {
       try {
         await _addProductImage(
-                guidelineImage(productId: productId, imagePath: f.path))
+                ProductImage(productId: productId, imagePath: f.path))
             .then((r) =>
                 r.fold((f) => fails.add(f.message.split('/').last), (_) {}));
       } catch (e) {
@@ -288,7 +288,6 @@ class _ManageProductPageState extends State<ManageProductPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final title =
         _isEditing ? localizations.editProduct : localizations.addProduct;
 
@@ -300,8 +299,8 @@ class _ManageProductPageState extends State<ManageProductPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              theme.colorScheme.secondary.withOpacity(0.7),
-              theme.scaffoldBackgroundColor,
+              AppConstants.secondaryColor.withOpacity(0.7),
+              AppConstants.backgroundColor,
             ],
           ),
         ),
@@ -326,11 +325,7 @@ class _ManageProductPageState extends State<ManageProductPage> {
               const SizedBox(height: AppConstants.mediumPadding),
               if (_currentUserId != null)
                 AppButton(
-                  text: localizations.retry,
-                  onPressed: _loadInitialData,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
+                    text: localizations.retry, onPressed: _loadInitialData),
             ],
           ),
         ),
@@ -342,56 +337,53 @@ class _ManageProductPageState extends State<ManageProductPage> {
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildProductFormFields(context, localizations),
-              const SizedBox(height: AppConstants.defaultPadding),
-              MultiImagePicker(
-                key: ValueKey('product_${widget.product?.productId}_images'),
-                initialExistingImages: _existingImages,
-                newlySelectedFiles: _newImageFiles,
-                onNewFilesAdded: _handleNewFilesAdded,
-                onExistingImageRemoved: _handleExistingImageRemoved,
-                onNewFileRemoved: _handleNewFileRemoved,
-                enabled: !_isSaving,
-                maxImages: 5,
-                itemBuilder: (context, imageSource, isExisting) {
-                  ImageProvider imageProvider;
-                  try {
-                    if (isExisting && imageSource is guidelineImage) {
-                      imageProvider = FileImage(File(imageSource.imagePath));
-                    } else if (!isExisting && imageSource is File) {
-                      imageProvider = FileImage(imageSource);
-                    } else {
-                      throw '_';
-                    }
-                  } catch (e) {
-                    imageProvider = const AssetImage(AppConstants.defaultguidelineImagePath);
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            _buildProductFormFields(context, localizations),
+            const SizedBox(height: AppConstants.defaultPadding),
+            MultiImagePicker(
+              key: ValueKey('product_${widget.product?.productId}_images'),
+              initialExistingImages: _existingImages,
+              newlySelectedFiles: _newImageFiles,
+              onNewFilesAdded: _handleNewFilesAdded,
+              onExistingImageRemoved: _handleExistingImageRemoved,
+              onNewFileRemoved: _handleNewFileRemoved,
+              enabled: !_isSaving,
+              maxImages: 5,
+              itemBuilder: (context, imageSource, isExisting) {
+                ImageProvider imageProvider;
+                try {
+                  if (isExisting && imageSource is ProductImage) {
+                    imageProvider = FileImage(File(imageSource.imagePath));
+                  } else if (!isExisting && imageSource is File) {
+                    imageProvider = FileImage(imageSource);
+                  } else {
+                    throw '_';
                   }
-                  return Image(image: imageProvider, fit: BoxFit.cover);
-                },
-              ),
-              const SizedBox(height: AppConstants.largePadding),
-              ErrorMessage(message: _saveError),
-              if (_saveError != null)
-                const SizedBox(height: AppConstants.smallPadding),
-              AppButton(
-                text: _isSaving
-                    ? localizations.saving
-                    : (_isEditing
-                        ? localizations.saveChanges
-                        : localizations.addProduct),
-                onPressed: _saveProduct,
-                isLoading: _isSaving,
-                enabled: !_isSaving,
-                icon: AppConstants.saveIcon,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              ),
-              const SizedBox(height: AppConstants.defaultPadding),
-            ],
-          ),
+                } catch (e) {
+                  imageProvider =
+                      const AssetImage(AppConstants.defaultguidelineImagePath);
+                }
+                return Image(image: imageProvider, fit: BoxFit.cover);
+              },
+            ),
+            const SizedBox(height: AppConstants.largePadding),
+            ErrorMessage(message: _saveError),
+            if (_saveError != null)
+              const SizedBox(height: AppConstants.smallPadding),
+            AppButton(
+              text: _isSaving
+                  ? localizations.saving
+                  : (_isEditing
+                      ? localizations.saveChanges
+                      : localizations.addProduct),
+              onPressed: _saveProduct,
+              isLoading: _isSaving,
+              enabled: !_isSaving,
+              icon: AppConstants.saveIcon,
+            ),
+            const SizedBox(height: AppConstants.defaultPadding),
+          ]),
         ),
       ),
     );
@@ -399,7 +391,6 @@ class _ManageProductPageState extends State<ManageProductPage> {
 
   Widget _buildProductFormFields(
       BuildContext context, AppLocalizations localizations) {
-
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       AppTextField(
           controller: _titleController,

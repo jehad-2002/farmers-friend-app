@@ -34,7 +34,6 @@ class CropList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -58,7 +57,7 @@ class CropList extends StatelessWidget {
         height: 1,
         indent: 16,
         endIndent: 16,
-        color: theme.dividerColor.withOpacity(0.2),
+        color: AppConstants.greyColor.withOpacity(0.2),
       ),
       itemBuilder: (context, index) {
         final crop = crops[index];
@@ -93,7 +92,7 @@ class _CropListTile extends StatelessWidget {
     if (onTap != null) {
       actions.add(IconButton(
         icon: const Icon(AppConstants.editIcon, size: 22),
-        color: theme.colorScheme.primary,
+        color: theme.primaryColor,
         onPressed: () => onTap!(crop),
       ));
     }
@@ -113,15 +112,16 @@ class _CropListTile extends StatelessWidget {
       leading: _CropAvatar(imagePath: crop.cropImage),
       title: Text(
         crop.cropName,
-        style: theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w500,
+        style: AppStyles.productTitleMedium.copyWith(
+          fontFamily: AppConstants.defaultFontFamily,
         ),
       ),
       subtitle: (crop.cropDescription?.isNotEmpty ?? false)
           ? Text(
               crop.cropDescription!,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+                color: AppConstants.textColorSecondary,
+                fontFamily: AppConstants.defaultFontFamily,
                 height: 1.2,
               ),
               maxLines: 2,
@@ -137,15 +137,13 @@ class _CropListTile extends StatelessWidget {
 
   void _showDeleteConfirmation(
       BuildContext context, AppLocalizations localizations) {
-    final theme = Theme.of(context);
-
     showDialog(
       context: context,
       builder: (_) => ConfirmDialog(
         title: localizations.confirmDelete,
         content: localizations.deleteCropConfirmation(crop.cropName),
         confirmText: localizations.delete,
-        confirmTextColor: theme.colorScheme.error,
+        confirmTextColor: Theme.of(context).colorScheme.error,
         onConfirm: () => onDelete!(crop),
       ),
     );
@@ -159,16 +157,16 @@ class _CropAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     ImageProvider? provider;
 
     if (imagePath != null && imagePath!.isNotEmpty) {
       if (imagePath!.startsWith('assets/')) {
         provider = AssetImage(imagePath!);
       } else if (imagePath!.startsWith('http')) {
+        // Network image
         provider = CachedNetworkImageProvider(imagePath!);
       } else {
+        // Local file
         try {
           provider = FileImage(File(imagePath!));
         } catch (e) {
@@ -181,19 +179,20 @@ class _CropAvatar extends StatelessWidget {
       return CircleAvatar(
         radius: 25,
         backgroundImage: provider,
-        backgroundColor: theme.colorScheme.background,
+        backgroundColor: AppConstants.backgroundColor,
         onBackgroundImageError: (error, stack) {
           debugPrint('Image load error: $error');
         },
       );
     }
 
+    // Fallback icon
     return CircleAvatar(
       radius: 25,
-      backgroundColor: theme.colorScheme.surface.withOpacity(0.2),
+      backgroundColor: AppConstants.accentColor.withOpacity(0.2),
       child: Icon(
         AppConstants.cropIcon,
-        color: theme.colorScheme.primary,
+        color: AppConstants.primaryColor,
         size: 26,
       ),
     );

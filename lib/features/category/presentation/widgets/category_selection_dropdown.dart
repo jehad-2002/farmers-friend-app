@@ -61,22 +61,21 @@ class _CategorySelectionDropdownState extends State<CategorySelectionDropdown> {
     final theme = Theme.of(context);
     return InputDecoration(
       labelText: label,
-      labelStyle: theme.textTheme.bodyMedium?.copyWith(
-        color: widget.enabled ? theme.colorScheme.primary : theme.disabledColor,
-        fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-      ),
-      prefixIcon: Icon(
-        AppConstants.categoryIcon,
-        color: widget.enabled ? theme.colorScheme.primary : theme.disabledColor,
-        size: 22,
-      ),
+      labelStyle: TextStyle(
+          color:
+              widget.enabled ? theme.primaryColorDark : AppConstants.greyColor,
+          fontFamily: AppConstants.defaultFontFamily),
+      prefixIcon: Icon(AppConstants.categoryIcon,
+          color:
+              widget.enabled ? theme.primaryColorDark : AppConstants.greyColor,
+          size: 22),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusCircular),
         borderSide: BorderSide.none,
       ),
       filled: true,
       fillColor: widget.enabled
-          ? theme.colorScheme.surface.withOpacity(0.8)
+          ? AppConstants.cardBackgroundColor.withOpacity(0.8)
           : theme.disabledColor.withOpacity(0.1),
       contentPadding: const EdgeInsets.symmetric(
         vertical: AppConstants.defaultPadding * 0.8,
@@ -88,7 +87,6 @@ class _CategorySelectionDropdownState extends State<CategorySelectionDropdown> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final effectiveLabel = widget.labelText ?? localizations.category;
 
     if (_isLoading) {
@@ -96,63 +94,47 @@ class _CategorySelectionDropdownState extends State<CategorySelectionDropdown> {
         decoration:
             _buildDecoration(context, localizations, effectiveLabel).copyWith(
           hintText: localizations.loadingCategories,
-          hintStyle: theme.textTheme.bodyMedium?.copyWith(
-            fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-          ),
+          hintStyle: TextStyle(fontFamily: AppConstants.defaultFontFamily),
         ),
         child: const SizedBox(
-          height: 20,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: LoadingIndicator(isCentered: true),
-          ),
-        ),
+            height: 20,
+            child: Align(
+                alignment: Alignment.centerLeft, child: LoadingIndicator(isCentered: true,))),
       );
     }
 
     if (_error != null) {
       return InputDecorator(
-        decoration:
-            _buildDecoration(context, localizations, effectiveLabel).copyWith(
-          errorText: localizations.errorLoadingCategories,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.error_outline,
-              color: theme.colorScheme.error,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                localizations.errorLoadingCategories,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.error,
-                ),
+          decoration:
+              _buildDecoration(context, localizations, effectiveLabel).copyWith(
+            errorText: localizations.errorLoadingCategories,
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.error_outline,
+                  color: Theme.of(context).colorScheme.error, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Text(localizations.errorLoadingCategories,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.error))),
+              IconButton(
+                icon: const Icon(Icons.refresh, size: 22),
+                tooltip: localizations.retry,
+                color: Theme.of(context).disabledColor,
+                onPressed: widget.enabled ? _fetchCategories : null,
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.refresh, size: 22),
-              tooltip: localizations.retry,
-              color: theme.disabledColor,
-              onPressed: widget.enabled ? _fetchCategories : null,
-            ),
-          ],
-        ),
-      );
+            ],
+          ));
     }
 
     if (_categories == null || _categories!.isEmpty) {
       return InputDecorator(
         decoration: _buildDecoration(context, localizations, effectiveLabel),
-        child: Text(
-          localizations.noCategoriesFound,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.textTheme.bodyMedium?.color,
-            fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-          ),
-        ),
+        child: Text(localizations.noCategoriesFound,
+            style: TextStyle(
+                color: AppConstants.textColorSecondary,
+                fontFamily: AppConstants.defaultFontFamily)),
       );
     }
 
@@ -161,12 +143,8 @@ class _CategorySelectionDropdownState extends State<CategorySelectionDropdown> {
       items: _categories!.map((category) {
         return DropdownMenuItem<int>(
           value: category.categoryId,
-          child: Text(
-            category.categoryName,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-            ),
-          ),
+          child: Text(category.categoryName,
+              style: TextStyle(fontFamily: AppConstants.defaultFontFamily)),
         );
       }).toList(),
       onChanged: widget.enabled ? widget.onChanged : null,
@@ -174,23 +152,14 @@ class _CategorySelectionDropdownState extends State<CategorySelectionDropdown> {
           (value) => value == null ? localizations.pleaseSelectCategory : null,
       decoration: _buildDecoration(context, localizations, effectiveLabel),
       disabledHint: widget.initialValue != null
-          ? Text(
-              _categories
-                      ?.firstWhere(
-                        (c) => c.categoryId == widget.initialValue,
-                        orElse: () => Category(
+          ? Text(_categories
+                  ?.firstWhere((c) => c.categoryId == widget.initialValue,
+                      orElse: () => Category(
                           categoryId: -1,
                           categoryName: "",
-                          categoryDescription: "",
-                        ),
-                      )
-                      .categoryName ??
-                  '',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.disabledColor,
-                fontFamily: theme.textTheme.bodyMedium?.fontFamily,
-              ),
-            )
+                          categoryDescription: ""))
+                  .categoryName ??
+              '')
           : null,
       isExpanded: true,
     );

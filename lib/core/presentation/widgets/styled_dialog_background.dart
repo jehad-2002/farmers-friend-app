@@ -15,8 +15,8 @@ class StyledDialogBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final borderRadiusValue = borderRadius ?? BorderRadius.circular(AppConstants.borderRadiusMedium);
+    final borderRadiusValue = borderRadius ??
+        BorderRadius.circular(AppConstants.borderRadiusMedium);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -25,15 +25,15 @@ class StyledDialogBackground extends StatelessWidget {
         borderRadius: borderRadiusValue,
         gradient: LinearGradient(
           colors: [
-            theme.colorScheme.secondary.withOpacity(0.8), // Use theme's secondary color
-            theme.colorScheme.surface, // Use theme's surface color
+            AppConstants.secondaryColor,
+            AppConstants.backgroundColor,
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
         boxShadow: [
           BoxShadow(
-            color: theme.shadowColor.withOpacity(0.15), // Use theme's shadow color
+            color: AppConstants.brownColor.withOpacity(0.15),
             blurRadius: 8,
             spreadRadius: 1,
             offset: const Offset(0, 4),

@@ -10,8 +10,8 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<RegisterCubit>(
       create: (_) => RegisterCubit(context),
-      child: Scaffold(
-        body: const RegistrationForm(),
+      child: const Scaffold(
+        body: RegistrationForm(),
       ),
     );
   }

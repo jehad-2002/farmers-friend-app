@@ -87,7 +87,7 @@ class SingleImagePicker extends StatelessWidget {
                     child: Icon(
                       AppConstants.closeIcon,
                       size: radius * 0.3,
-                      color: theme.colorScheme.onError,
+                      color: AppConstants.whiteColor,
                     ),
                   ),
                 ),

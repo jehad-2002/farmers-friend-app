@@ -2,21 +2,24 @@ import 'package:farmersfriendapp/core/enums/filter_type.dart';
 import 'package:farmersfriendapp/core/errors/failures.dart';
 import 'package:farmersfriendapp/core/models/product.dart';
 import 'package:farmersfriendapp/core/models/product_with_image.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/crop_selection_dropdown.dart';
+// Widgets moved to separate files or kept as private widgets below
+import 'package:farmersfriendapp/features/product/presentation/widgets/product_list_header.dart';
+import 'package:farmersfriendapp/features/product/presentation/widgets/crop_filter_section.dart';
+import 'package:farmersfriendapp/features/product/presentation/widgets/product_list_content.dart';
+// Core Widgets remain
 import 'package:farmersfriendapp/core/presentation/widgets/custom_app_bar.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/custom_search_bar.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/empty_list_indicator.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/error_indicator.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/loading_indicator.dart';
-import 'package:farmersfriendapp/core/presentation/widgets/shared_filter_bar.dart';
+// Service Locator and Constants
 import 'package:farmersfriendapp/core/service_locator.dart';
 import 'package:farmersfriendapp/core/utils/app_constants.dart';
+// Use Cases
 import 'package:farmersfriendapp/features/product/domain/usecases/delete_product.dart';
 import 'package:farmersfriendapp/features/product/domain/usecases/get_all_products_with_images.dart';
 import 'package:farmersfriendapp/features/product/domain/usecases/get_products_with_images_by_user.dart';
+// Navigation Targets
 import 'package:farmersfriendapp/features/product/presentation/pages/manage_product_page.dart';
 import 'package:farmersfriendapp/features/product/presentation/pages/product_detail_page.dart';
-import 'package:farmersfriendapp/features/product/presentation/widgets/custom_product_grid.dart';
+// Product Grid Widget
+// Flutter and Localization
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,6 +28,7 @@ class ProductListPage extends StatefulWidget {
 
   const ProductListPage({Key? key, this.userId}) : super(key: key);
 
+  // لتحديد ما إذا كانت الصفحة تعرض منتجات المستخدم الحالي أم كل المنتجات
   bool get isUserView => userId != null && userId! > 0;
 
   @override
@@ -41,6 +45,7 @@ class _ProductListPageState extends State<ProductListPage> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
+  // Use Cases instances
   late final GetAllProductsWithImages _getAllProductsWithImages;
   late final GetProductsWithImagesByUser _getProductsWithImagesByUser;
   late final DeleteProduct _deleteProduct;
@@ -48,10 +53,11 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   void initState() {
     super.initState();
-    _resolveUseCases();
-    _loadInitialData();
+    _resolveUseCases(); // الحصول على الـ Use Cases من Service Locator
+    _loadInitialData(); // تحميل البيانات الأولية
   }
 
+  // الحصول على الـ Use Cases المطلوبة
   void _resolveUseCases() {
     _getAllProductsWithImages = sl.getAllProductsWithImages;
     _getProductsWithImagesByUser = sl.getProductsWithImagesByUser;
@@ -60,53 +66,65 @@ class _ProductListPageState extends State<ProductListPage> {
 
   @override
   void dispose() {
-    _searchController.dispose();
+    _searchController.dispose(); // تحرير الـ Controller عند إغلاق الصفحة
     super.dispose();
   }
 
+  // دالة تحميل البيانات (إما كل المنتجات أو منتجات المستخدم)
   Future<void> _loadInitialData({bool showLoading = true}) async {
+    if (!mounted) return; // التأكد من أن الـ Widget مازال موجوداً
+
     if (showLoading) {
       setState(() {
-        _isLoading = true;
-        _errorMessage = null;
+        _isLoading = true; // عرض مؤشر التحميل
+        _errorMessage = null; // مسح أي رسالة خطأ سابقة
       });
     }
 
     try {
+      // تحديد الـ Use Case المناسب بناءً على `isUserView`
       final result = widget.isUserView
           ? await _getProductsWithImagesByUser(widget.userId!)
           : await _getAllProductsWithImages();
 
-      if (!mounted) return;
+      if (!mounted) return; // التحقق مرة أخرى بعد العملية غير المتزامنة
 
-      result.fold((failure) => throw failure, (products) {
-        _allProducts = products;
-        _applyFiltersAndSort();
-      });
+      result.fold(
+        (failure) => throw failure, // رمي الخطأ لمعالجته في catch
+        (products) {
+          _allProducts = products; // تخزين كل المنتجات التي تم جلبها
+          _applyFiltersAndSort(); // تطبيق الفلاتر والترتيب لعرض المنتجات
+        },
+      );
       if (mounted) {
         setState(() {
-          _errorMessage = null;
+          _errorMessage = null; // مسح رسالة الخطأ في حالة النجاح
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
+          // تحديد رسالة الخطأ المناسبة
           _errorMessage = (e is Failure)
               ? e.getLocalizedMessage(context)
               : AppLocalizations.of(context)!.errorLoadingData;
-          _allProducts = [];
+          _allProducts = []; // مسح القوائم في حالة الخطأ
           _displayProducts = [];
         });
       }
     } finally {
+      // إخفاء مؤشر التحميل دائماً في النهاية
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
+  // تطبيق الفلاتر (بحث، نوع المحصول) والترتيب على قائمة المنتجات
   void _applyFiltersAndSort() {
     if (!mounted) return;
-    List<ProductWithImages> result = List.from(_allProducts);
 
+    List<ProductWithImages> result = List.from(_allProducts); // نسخة قابلة للتعديل
+
+    // 1. تطبيق فلتر البحث
     if (_searchQuery.isNotEmpty) {
       final query = _searchQuery.toLowerCase();
       result = result
@@ -114,6 +132,7 @@ class _ProductListPageState extends State<ProductListPage> {
           .toList();
     }
 
+    // 2. تطبيق فلتر نوع المحصول
     if (_currentFilterType == FilterType.filterByCrop &&
         _selectedCropIdForFilter != null) {
       result = result
@@ -121,6 +140,7 @@ class _ProductListPageState extends State<ProductListPage> {
           .toList();
     }
 
+    // 3. تطبيق الترتيب
     switch (_currentFilterType) {
       case FilterType.sortByDateNewestFirst:
         result.sort(
@@ -130,55 +150,71 @@ class _ProductListPageState extends State<ProductListPage> {
         result.sort(
             (a, b) => (a.product.dateAdded).compareTo(b.product.dateAdded));
         break;
-      default:
+      default: // الترتيب الافتراضي (الأحدث أولاً)
         result.sort(
             (a, b) => (b.product.dateAdded).compareTo(a.product.dateAdded));
         break;
     }
 
+    // تحديث حالة الواجهة لعرض المنتجات المفلترة والمرتبة
     setState(() => _displayProducts = result);
   }
 
+  // --- معالجات الأحداث (Event Handlers) ---
+
+  // عند تغيير نص البحث
   void _onSearchChanged(String query) {
-    if (_searchQuery != query) {
+    if (_searchQuery != query) { // تجنب التحديث غير الضروري
       setState(() => _searchQuery = query);
-      _applyFiltersAndSort();
+      _applyFiltersAndSort(); // إعادة تطبيق الفلاتر
     }
   }
 
+  // عند تغيير نوع الفلتر/الترتيب
   void _onFilterTypeChanged(FilterType? filterType) {
     final newFilter = filterType ?? FilterType.none;
-    if (newFilter != _currentFilterType) {
+    if (newFilter != _currentFilterType) { // تجنب التحديث غير الضروري
       setState(() {
         _currentFilterType = newFilter;
-        _applyFiltersAndSort();
+         // إذا لم يكن الفلتر حسب المحصول، قم بإلغاء تحديد المحصول
+        if (_currentFilterType != FilterType.filterByCrop) {
+           _selectedCropIdForFilter = null;
+        }
+        _applyFiltersAndSort(); // إعادة تطبيق الفلاتر
       });
     }
   }
 
+  // عند اختيار محصول من القائمة المنسدلة (فقط عندما يكون الفلتر حسب المحصول نشطاً)
   void _onCropSelectedForFilter(int? cropId) {
     if (_currentFilterType == FilterType.filterByCrop) {
       setState(() {
         _selectedCropIdForFilter = cropId;
-        _applyFiltersAndSort();
+        _applyFiltersAndSort(); // إعادة تطبيق الفلاتر
       });
     }
   }
 
+  // --- عمليات التنقل (Navigation) ---
+
+  // الانتقال لصفحة إضافة/تعديل المنتج
   Future<void> _navigateManageProduct({Product? product}) async {
-    if (!widget.isUserView) return;
+    if (!widget.isUserView) return; // فقط للمستخدم صاحب المنتجات
+
     final result = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) => ManageProductPage(product: product),
       ),
     );
+    // إذا عاد بنتيجة true (تم الحفظ بنجاح)، أعد تحميل البيانات لعرض التغييرات
     if (result == true && mounted) {
-      _loadInitialData(showLoading: false);
+      _loadInitialData(showLoading: false); // إعادة تحميل بدون إظهار مؤشر التحميل الرئيسي
     }
   }
 
-  void _navigateToDetail(ProductWithImages productWithImages) {
+  // الانتقال لصفحة تفاصيل المنتج
+  void navigateToDetail(ProductWithImages productWithImages) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -187,147 +223,119 @@ class _ProductListPageState extends State<ProductListPage> {
     );
   }
 
+  // --- عمليات المنتج (Product Actions) ---
+
+  // معالجة حذف المنتج
   Future<void> _handleDeleteProduct(Product product) async {
-    if (!widget.isUserView || product.productId == null) return;
+    if (!widget.isUserView || product.productId == null) return; // التحقق من الصلاحية
+
     try {
       final result = await _deleteProduct(product.productId!);
-      if (!mounted) return;
+      if (!mounted) return; // التحقق بعد العملية غير المتزامنة
+
       result.fold(
-        (f) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(f.getLocalizedMessage(context)),
-            backgroundColor: AppConstants.errorColor)),
+        (failure) {
+          // عرض رسالة خطأ في حالة فشل الحذف
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(failure.getLocalizedMessage(context)),
+            backgroundColor: AppConstants.errorColor,
+          ));
+        },
         (_) {
           setState(() {
-            _allProducts.removeWhere(
-                (pwi) => pwi.product.productId == product.productId);
-            _applyFiltersAndSort();
+            _allProducts.removeWhere((pwi) => pwi.product.productId == product.productId);
+            // لا حاجة لـ _applyFiltersAndSort() هنا لأن displayProducts ستُبنى من allProducts المحدثة
+             _applyFiltersAndSort(); // تحديث القائمة المعروضة
           });
+          // 2. عرض رسالة نجاح
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                  AppLocalizations.of(context)!.productDeletedSuccessfully),
-              backgroundColor: AppConstants.successColor));
+            content: Text(AppLocalizations.of(context)!.productDeletedSuccessfully),
+            backgroundColor: AppConstants.successColor,
+          ));
         },
       );
     } catch (e) {
+      // معالجة الأخطاء غير المتوقعة
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                AppLocalizations.of(context)!.unexpectedError(e.toString())),
-            backgroundColor: AppConstants.errorColor));
+          content: Text(AppLocalizations.of(context)!.unexpectedError(e.toString())),
+          backgroundColor: AppConstants.errorColor,
+        ));
       }
     }
   }
 
+  // --- بناء الواجهة (Build Method) ---
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: AppConstants.backgroundColor,
+      // AppBar يظهر فقط في حالة عرض منتجات المستخدم
       appBar: widget.isUserView
           ? CustomAppBar(
               title: localizations.myProducts,
-              iconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
-              backgroundColor: theme.colorScheme.primary,
+              iconTheme: const IconThemeData(color: AppConstants.textOnPrimary),
+              backgroundColor: AppConstants.primaryColorDark,
             )
           : null,
       body: RefreshIndicator(
-        onRefresh: () => _loadInitialData(showLoading: false),
-        color: theme.colorScheme.primary,
-        backgroundColor: theme.scaffoldBackgroundColor,
+        onRefresh: () => _loadInitialData(showLoading: false), // السحب للتحديث
+        color: AppConstants.primaryColor,
+        backgroundColor: AppConstants.backgroundColor,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.defaultPadding,
-                vertical: AppConstants.smallPadding,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomSearchBar(
-                      controller: _searchController,
-                      onChanged: _onSearchChanged,
-                      hintText: localizations.searchProducts,
-                      enabled: !_isLoading,
-                    ),
-                  ),
-                  const SizedBox(width: AppConstants.smallPadding),
-                  SharedFilterBar(
-                    currentFilter: _currentFilterType,
-                    onFilterChanged: _onFilterTypeChanged,
-                  ),
-                ],
-              ),
+            // --- شريط البحث والفلتر (Widget مفصول) ---
+            ProductListHeader(
+              searchController: _searchController,
+              onSearchChanged: _onSearchChanged,
+              currentFilter: _currentFilterType,
+              onFilterChanged: _onFilterTypeChanged,
+              isLoading: _isLoading,
+              localizations: localizations,
             ),
-            if (_currentFilterType == FilterType.filterByCrop && !_isLoading)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.defaultPadding,
-                  vertical: AppConstants.smallPadding / 2,
-                ),
-                child: CropSelectionDropdown(
-                  initialValue: _selectedCropIdForFilter,
-                  labelText: localizations.filterByCrop,
-                  enabled: !_isLoading,
-                  onChanged: _onCropSelectedForFilter,
-                  validator: null,
-                ),
-              ),
+
+            // --- قسم فلتر المحاصيل (Widget مفصول) ---
+            CropFilterSection(
+              currentFilterType: _currentFilterType,
+              isLoading: _isLoading,
+              selectedCropId: _selectedCropIdForFilter,
+              onCropSelected: _onCropSelectedForFilter,
+              localizations: localizations,
+            ),
+
+            // --- محتوى القائمة الرئيسي (Widget مفصول) ---
             Expanded(
-              child: _buildContentBody(context, localizations),
+              child: ProductListContent(
+                isLoading: _isLoading,
+                errorMessage: _errorMessage,
+                displayProducts: _displayProducts,
+                searchQuery: _searchQuery,
+                currentFilterType: _currentFilterType,
+                selectedCropIdForFilter: _selectedCropIdForFilter,
+                isUserView: widget.isUserView,
+                onRetry: _loadInitialData,
+                onProductTap: navigateToDetail,
+                onEditTap: (product) => _navigateManageProduct(product: product),
+                onDeleteTap: _handleDeleteProduct,
+                localizations: localizations,
+              ),
             ),
           ],
         ),
       ),
+      // زر الإضافة يظهر فقط في حالة عرض منتجات المستخدم
       floatingActionButton: widget.isUserView
           ? FloatingActionButton(
-              backgroundColor: theme.colorScheme.primary,
-              foregroundColor: theme.colorScheme.onPrimary,
+              backgroundColor: AppConstants.primaryColor,
+              foregroundColor: AppConstants.whiteColor,
               tooltip: localizations.addProduct,
+              // تعطيل الزر أثناء التحميل
               onPressed: _isLoading ? null : () => _navigateManageProduct(),
               child: const Icon(AppConstants.addIcon),
             )
           : null,
-    );
-  }
-
-  Widget _buildContentBody(
-      BuildContext context, AppLocalizations localizations) {
-
-    if (_isLoading) {
-      return const LoadingIndicator(isCentered: true);
-    }
-    if (_errorMessage != null) {
-      return ErrorIndicator(
-        message: _errorMessage!,
-        onRetry: _loadInitialData,
-      );
-    }
-
-    if (_displayProducts.isEmpty) {
-      final message = _searchQuery.isNotEmpty ||
-              (_currentFilterType == FilterType.filterByCrop &&
-                  _selectedCropIdForFilter != null)
-          ? localizations.noMatchingProductsFound
-          : (widget.isUserView
-              ? localizations.noOwnProductsFound
-              : localizations.noProductsFound);
-      return EmptyListIndicator(
-        message: message,
-        icon: AppConstants.productIcon,
-      );
-    }
-
-    return CustomProductGrid(
-      productsWithImages: _displayProducts,
-      showAdminActions: widget.isUserView,
-      onProductTap: _navigateToDetail,
-      onEditTap: (product) {
-        _navigateManageProduct(product: product);
-      },
-      onDeleteTap: _handleDeleteProduct,
     );
   }
 }

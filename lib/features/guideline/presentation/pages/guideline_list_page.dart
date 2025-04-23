@@ -231,25 +231,24 @@ class _GuidelineListPageState extends State<GuidelineListPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: AppConstants.backgroundColor,
       appBar: widget.isAdminView
           ? CustomAppBar(
               title: localizations.manageGuidelines,
-              iconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
-              backgroundColor: theme.colorScheme.primary,
+              iconTheme: const IconThemeData(color: AppConstants.textOnPrimary),
+              backgroundColor: AppConstants.primaryColorDark,
             )
           : null,
       body: RefreshIndicator(
         onRefresh: () => _loadInitialData(showLoading: false),
-        color: theme.colorScheme.primary,
-        backgroundColor: theme.colorScheme.background,
+        color: theme.primaryColor,
+        backgroundColor: AppConstants.backgroundColor,
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.defaultPadding,
-                vertical: AppConstants.smallPadding,
-              ),
+                  horizontal: AppConstants.defaultPadding,
+                  vertical: AppConstants.smallPadding),
               child: Row(
                 children: [
                   Expanded(
@@ -276,9 +275,8 @@ class _GuidelineListPageState extends State<GuidelineListPage> {
                 maintainState: true,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppConstants.defaultPadding,
-                    vertical: AppConstants.smallPadding / 2,
-                  ),
+                      horizontal: AppConstants.defaultPadding,
+                      vertical: AppConstants.smallPadding / 2),
                   child: CropSelectionDropdown(
                     initialValue: _selectedCropIdForFilter,
                     labelText: localizations.filterByCrop,
@@ -297,8 +295,8 @@ class _GuidelineListPageState extends State<GuidelineListPage> {
       ),
       floatingActionButton: widget.isAdminView
           ? FloatingActionButton(
-              backgroundColor: theme.colorScheme.primary,
-              foregroundColor: theme.colorScheme.onPrimary,
+              backgroundColor: theme.primaryColor,
+              foregroundColor: AppConstants.whiteColor,
               tooltip: localizations.addGuideline,
               onPressed: _isLoading ? null : () => _navigateManageGuideline(),
               child: const Icon(AppConstants.addIcon),
@@ -309,8 +307,6 @@ class _GuidelineListPageState extends State<GuidelineListPage> {
 
   Widget _buildContentBody(
       BuildContext context, AppLocalizations localizations) {
-    final theme = Theme.of(context);
-
     if (_isLoading) return const LoadingIndicator(isCentered: true);
     if (_errorMessage != null) {
       return ErrorIndicator(message: _errorMessage!, onRetry: _loadInitialData);
@@ -323,9 +319,7 @@ class _GuidelineListPageState extends State<GuidelineListPage> {
           ? localizations.noMatchingGuidelinesFound
           : localizations.noGuidelinesFound;
       return EmptyListIndicator(
-        message: message,
-        icon: AppConstants.guidelineIcon,
-      );
+          message: message, icon: AppConstants.guidelineIcon);
     }
 
     return CustomGuidelineGrid(

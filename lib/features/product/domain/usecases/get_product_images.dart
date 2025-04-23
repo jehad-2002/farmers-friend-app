@@ -8,7 +8,7 @@ class GetProductImages {
 
   GetProductImages(this.repository);
 
-  Future<Either<Failure, List<guidelineImage>>> call(int productId) async {
+  Future<Either<Failure, List<ProductImage>>> call(int productId) async {
     return await repository.getImagesForProduct(productId);
   }
 }

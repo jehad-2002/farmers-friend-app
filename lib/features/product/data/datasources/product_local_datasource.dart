@@ -10,8 +10,8 @@ abstract class ProductLocalDataSource {
   Future<Product> addProduct(Product product);
   Future<Product> updateProduct(Product product);
   Future<void> deleteProduct(int productId);
-  Future<List<guidelineImage>> getImagesForProduct(int productId);
-  Future<guidelineImage> addImageToProduct(guidelineImage productImage);
+  Future<List<ProductImage>> getImagesForProduct(int productId);
+  Future<ProductImage> addImageToProduct(ProductImage productImage);
   Future<void> deleteProductImage(int imageId);
   Future<List<ProductWithImages>> getAllProductsWithImages();
   Future<List<ProductWithImages>> getProductsWithImagesByUser(int userId);
@@ -85,19 +85,19 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
   }
 
   @override
-  Future<List<guidelineImage>> getImagesForProduct(int productId) async {
+  Future<List<ProductImage>> getImagesForProduct(int productId) async {
     try {
       final maps = await dbHelper.query('ProductImages',
           where: 'ProductID = ?', whereArgs: [productId]);
 
-      return maps.map((e) => guidelineImage.fromMap(e)).toList();
+      return maps.map((e) => ProductImage.fromMap(e)).toList();
     } catch (e) {
       throw DatabaseException('Failed to get product images: $e');
     }
   }
 
   @override
-  Future<guidelineImage> addImageToProduct(guidelineImage productImage) async {
+  Future<ProductImage> addImageToProduct(ProductImage productImage) async {
     try {
       final imageId =
           await dbHelper.insert('ProductImages', productImage.toMap());

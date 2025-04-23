@@ -181,23 +181,13 @@ class _ManageCropPageState extends State<ManageCropPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final String title =
         _isEditing ? localizations.editCrop : localizations.addCrop;
 
     return Scaffold(
       appBar: CustomAppBar(title: title),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              theme.colorScheme.secondary.withOpacity(0.7),
-              theme.colorScheme.background,
-            ],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: AppGradients.pageBackground),
         child: Padding(
           padding: const EdgeInsets.all(AppConstants.defaultPadding),
           child: _CropForm(
@@ -259,7 +249,6 @@ class _CropForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Form(
       key: formKey,

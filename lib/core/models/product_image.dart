@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-class guidelineImage extends Equatable {
+class ProductImage extends Equatable {
   final int? imageId;
   final String imagePath;
   final int productId;
 
-  const guidelineImage(
+  const ProductImage(
       {this.imageId, required this.imagePath, required this.productId});
 
   @override
@@ -15,19 +15,19 @@ class guidelineImage extends Equatable {
     return {'ImageID': imageId, 'ImagePath': imagePath, 'ProductID': productId};
   }
 
-  factory guidelineImage.fromMap(Map<String, dynamic> map) {
-    return guidelineImage(
+  factory ProductImage.fromMap(Map<String, dynamic> map) {
+    return ProductImage(
         imageId: map['ImageID'] as int?,
         imagePath: map['ImagePath'] as String,
         productId: map['ProductID'] as int);
   }
 
-  guidelineImage copyWith({
+  ProductImage copyWith({
     int? imageId,
     String? imagePath,
     int? productId,
   }) {
-    return guidelineImage(
+    return ProductImage(
       imageId: imageId ?? this.imageId,
       imagePath: imagePath ?? this.imagePath,
       productId: productId ?? this.productId,

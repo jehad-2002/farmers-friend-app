@@ -76,55 +76,44 @@ class _CropSelectionDropdownState extends State<CropSelectionDropdown> {
 
     final InputDecoration decoration = InputDecoration(
       labelText: effectiveLabel,
-      labelStyle: theme.textTheme.bodyMedium?.copyWith(
-        color: widget.enabled
-            ? theme.textTheme.bodyMedium?.color?.withOpacity(0.8)
-            : theme.disabledColor,
-        fontFamily: AppConstants.defaultFontFamily,
-      ),
+      labelStyle: TextStyle(
+          color: widget.enabled
+              ? AppConstants.textColorPrimary.withOpacity(0.8)
+              : AppConstants.greyColor,
+          fontFamily: AppConstants.defaultFontFamily),
       prefixIcon: Icon(AppConstants.cropIcon,
           color: widget.enabled
-              ? theme.colorScheme.primary
-              : theme.disabledColor,
+              ? AppConstants.primaryColorDark
+              : AppConstants.greyColor,
           size: 21),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.dividerColor.withOpacity(0.6),
-          width: 1.1,
-        ),
+            color: AppConstants.brownColor.withOpacity(0.6), width: 1.1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.dividerColor.withOpacity(0.6),
-          width: 1.1,
-        ),
+            color: AppConstants.brownColor.withOpacity(0.6), width: 1.1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.colorScheme.primary,
-          width: 1.5,
-        ),
+            color: AppConstants.primaryColor, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.colorScheme.error,
-          width: 1.3,
-        ),
+            color: AppConstants.errorColor, width: 1.3),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadiusMedium),
         borderSide: BorderSide(
-          color: theme.colorScheme.error,
-          width: 1.5,
-        ),
+            color: AppConstants.errorColor, width: 1.5),
       ),
       filled: true,
       fillColor: widget.enabled
-          ? theme.colorScheme.surface.withOpacity(0.9)
+          ? AppConstants.whiteColor.withOpacity(0.9)
           : theme.disabledColor.withOpacity(0.1),
       contentPadding: const EdgeInsets.symmetric(
         vertical: AppConstants.defaultPadding * 0.7,
@@ -145,45 +134,37 @@ class _CropSelectionDropdownState extends State<CropSelectionDropdown> {
 
     if (_error != null) {
       return InputDecorator(
-        decoration: decoration.copyWith(
-          labelText: null,
-          errorText: _error,
-          errorMaxLines: 3,
-        ),
-        child: Row(
-          children: [
-            Icon(AppConstants.errorOutlineIcon,
-                color: theme.colorScheme.error, size: 20),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                localizations.errorLoadingCrops,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.error,
-                ),
+          decoration: decoration.copyWith(
+            labelText: null,
+            errorText: _error,
+            errorMaxLines: 3,
+          ),
+          child: Row(
+            children: [
+              Icon(AppConstants.errorOutlineIcon,
+                  color: theme.colorScheme.error, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Text(localizations.errorLoadingCrops,
+                      style: TextStyle(color: theme.colorScheme.error))),
+              IconButton(
+                icon: const Icon(Icons.refresh, size: 22),
+                tooltip: localizations.retry,
+                onPressed: widget.enabled ? _fetchCrops : null,
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.refresh, size: 22),
-              tooltip: localizations.retry,
-              onPressed: widget.enabled ? _fetchCrops : null,
-            ),
-          ],
-        ),
-      );
+            ],
+          ));
     }
 
     if (_crops == null || _crops!.isEmpty) {
       return InputDecorator(
-        decoration: decoration,
-        child: Text(
-          localizations.noCropsAvailable,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.textTheme.bodyMedium?.color,
-            fontFamily: AppConstants.defaultFontFamily,
-          ),
-        ),
-      );
+          decoration: decoration,
+          child: Text(
+            localizations.noCropsAvailable,
+            style: TextStyle(
+                color: AppConstants.textColorSecondary,
+                fontFamily: AppConstants.defaultFontFamily),
+          ));
     }
 
     return DropdownButtonFormField<int>(
@@ -195,10 +176,9 @@ class _CropSelectionDropdownState extends State<CropSelectionDropdown> {
                 value: crop.cropId,
                 child: Text(
                   crop.cropName,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontFamily: AppConstants.defaultFontFamily,
-                    color: theme.textTheme.bodyMedium?.color,
-                  ),
+                  style: TextStyle(
+                      fontFamily: AppConstants.defaultFontFamily,
+                      color: AppConstants.textColorPrimary),
                   overflow: TextOverflow.ellipsis,
                 ),
               );
@@ -209,20 +189,15 @@ class _CropSelectionDropdownState extends State<CropSelectionDropdown> {
       decoration: decoration,
       disabledHint: widget.initialValue != null &&
               (_crops?.any((c) => c.cropId == widget.initialValue) ?? false)
-          ? Text(
-              _crops!
-                  .firstWhere((c) => c.cropId == widget.initialValue!)
-                  .cropName,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontFamily: AppConstants.defaultFontFamily,
-              ),
-            )
+          ? Text(_crops!
+              .firstWhere((c) => c.cropId == widget.initialValue!)
+              .cropName)
           : null,
       isExpanded: true,
-      style: theme.textTheme.bodyMedium?.copyWith(
+      style: TextStyle(
         color: widget.enabled
-            ? theme.textTheme.bodyMedium?.color
-            : theme.disabledColor,
+            ? AppConstants.textColorPrimary
+            : AppConstants.textColorSecondary,
         fontFamily: AppConstants.defaultFontFamily,
         fontSize: 16,
       ),

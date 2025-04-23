@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 class AddProductImage {
   final ProductRepository repository;
   AddProductImage(this.repository);
-  Future<Either<Failure, guidelineImage>> call(guidelineImage productImage) async {
+  Future<Either<Failure, ProductImage>> call(ProductImage productImage) async {
     return await repository.addImageToProduct(productImage);
   }
 }

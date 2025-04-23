@@ -34,17 +34,13 @@ class CustomGuidelineGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
     if (errorMessage != null) {
-      return ErrorIndicator(
-        message: errorMessage!,
-        onRetry: onRetry,
-      );
+      return ErrorIndicator(message: errorMessage!, onRetry: onRetry);
     }
 
     if (guidelinesWithImages.isEmpty) {
@@ -56,9 +52,8 @@ class CustomGuidelineGrid extends StatelessWidget {
 
     return GridView.builder(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppConstants.defaultPadding / 2,
-        vertical: AppConstants.smallPadding,
-      ),
+          horizontal: AppConstants.defaultPadding / 2,
+          vertical: AppConstants.smallPadding),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.8,

@@ -129,14 +129,12 @@ class _CategoryListPageState extends State<CategoryListPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: CustomAppBar(title: localizations.manageCategories),
       body: _buildBody(context, localizations),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.colorScheme.primary,
-        foregroundColor: theme.colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         tooltip: localizations.addCategory,
         onPressed: () => _navigateManageCategory(),
         child: const Icon(AppConstants.addIcon),
@@ -145,8 +143,6 @@ class _CategoryListPageState extends State<CategoryListPage> {
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations localizations) {
-    final theme = Theme.of(context);
-
     if (_isLoading) {
       return const LoadingIndicator();
     }
@@ -166,7 +162,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
 
     return RefreshIndicator(
       onRefresh: () => _loadCategories(showLoading: false),
-      color: theme.colorScheme.primary,
+      color: Theme.of(context).primaryColor,
       child: CategoryList(
         categories: _categories!,
         onItemTap: (category) => _navigateManageCategory(category: category),

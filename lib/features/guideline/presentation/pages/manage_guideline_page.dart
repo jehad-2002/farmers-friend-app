@@ -20,6 +20,7 @@ import 'package:farmersfriendapp/features/guideline/domain/usecases/delete_guide
 import 'package:farmersfriendapp/features/guideline/domain/usecases/get_guideline_images.dart';
 import 'package:farmersfriendapp/features/guideline/domain/usecases/update_guideline.dart';
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -282,7 +283,6 @@ class _ManageGuidelinePageState extends State<ManageGuidelinePage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final title =
         _isEditing ? localizations.editProduct : localizations.addGuideline;
 
@@ -294,8 +294,8 @@ class _ManageGuidelinePageState extends State<ManageGuidelinePage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              theme.colorScheme.secondary.withOpacity(0.7),
-              theme.colorScheme.background,
+              AppConstants.secondaryColor.withOpacity(0.7),
+              AppConstants.backgroundColor,
             ],
           ),
         ),
@@ -307,7 +307,7 @@ class _ManageGuidelinePageState extends State<ManageGuidelinePage> {
   Widget _buildBody(AppLocalizations localizations) {
     if (_isLoadingData) return const LoadingIndicator(isCentered: true);
 
-    String? initialError = _pageError ?? 
+    String? initialError = _pageError ??
         (_currentUserId == null ? localizations.userNotLoggedIn : null);
     if (initialError != null) {
       return Center(
@@ -320,9 +320,7 @@ class _ManageGuidelinePageState extends State<ManageGuidelinePage> {
               const SizedBox(height: AppConstants.mediumPadding),
               if (_currentUserId != null)
                 AppButton(
-                  text: localizations.retry,
-                  onPressed: _loadInitialData,
-                ),
+                    text: localizations.retry, onPressed: _loadInitialData),
             ],
           ),
         ),
@@ -334,55 +332,53 @@ class _ManageGuidelinePageState extends State<ManageGuidelinePage> {
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildguidelineFormFields(context, localizations),
-              const SizedBox(height: AppConstants.defaultPadding),
-              MultiImagePicker(
-                key: ValueKey('guideline${widget.guideline?.guidanceId}_images'),
-                initialExistingImages: _existingImages,
-                newlySelectedFiles: _newImageFiles,
-                onNewFilesAdded: _handleNewFilesAdded,
-                onExistingImageRemoved: _handleExistingImageRemoved,
-                onNewFileRemoved: _handleNewFileRemoved,
-                enabled: !_isSaving,
-                maxImages: 5,
-                itemBuilder: (context, imageSource, isExisting) {
-                  ImageProvider imageProvider;
-                  try {
-                    if (isExisting && imageSource is GuidelineImage) {
-                      imageProvider = FileImage(File(imageSource.imagePath));
-                    } else if (!isExisting && imageSource is File) {
-                      imageProvider = FileImage(imageSource);
-                    } else {
-                      throw '_';
-                    }
-                  } catch (e) {
-                    imageProvider =
-                        const AssetImage(AppConstants.defaultguidelineImagePath);
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            _buildguidelineFormFields(context, localizations),
+            const SizedBox(height: AppConstants.defaultPadding),
+            MultiImagePicker(
+              key: ValueKey('guideline${widget.guideline?.guidanceId}_images'),
+              initialExistingImages: _existingImages,
+              newlySelectedFiles: _newImageFiles,
+              onNewFilesAdded: _handleNewFilesAdded,
+              onExistingImageRemoved: _handleExistingImageRemoved,
+              onNewFileRemoved: _handleNewFileRemoved,
+              enabled: !_isSaving,
+              maxImages: 5,
+              itemBuilder: (context, imageSource, isExisting) {
+                ImageProvider imageProvider;
+                try {
+                  if (isExisting && imageSource is GuidelineImage) {
+                    imageProvider = FileImage(File(imageSource.imagePath));
+                  } else if (!isExisting && imageSource is File) {
+                    imageProvider = FileImage(imageSource);
+                  } else {
+                    throw '_';
                   }
-                  return Image(image: imageProvider, fit: BoxFit.cover);
-                },
-              ),
-              const SizedBox(height: AppConstants.largePadding),
-              ErrorMessage(message: _saveError),
-              if (_saveError != null)
-                const SizedBox(height: AppConstants.smallPadding),
-              AppButton(
-                text: _isSaving
-                    ? localizations.saving
-                    : (_isEditing
-                        ? localizations.saveChanges
-                        : localizations.addGuideline),
-                onPressed: _saveguidance,
-                isLoading: _isSaving,
-                enabled: !_isSaving,
-                icon: AppConstants.saveIcon,
-              ),
-              const SizedBox(height: AppConstants.defaultPadding),
-            ],
-          ),
+                } catch (e) {
+                  imageProvider =
+                      const AssetImage(AppConstants.defaultguidelineImagePath);
+                }
+                return Image(image: imageProvider, fit: BoxFit.cover);
+              },
+            ),
+            const SizedBox(height: AppConstants.largePadding),
+            ErrorMessage(message: _saveError),
+            if (_saveError != null)
+              const SizedBox(height: AppConstants.smallPadding),
+            AppButton(
+              text: _isSaving
+                  ? localizations.saving
+                  : (_isEditing
+                      ? localizations.saveChanges
+                      : localizations.addGuideline),
+              onPressed: _saveguidance,
+              isLoading: _isSaving,
+              enabled: !_isSaving,
+              icon: AppConstants.saveIcon,
+            ),
+            const SizedBox(height: AppConstants.defaultPadding),
+          ]),
         ),
       ),
     );
@@ -390,42 +386,35 @@ class _ManageGuidelinePageState extends State<ManageGuidelinePage> {
 
   Widget _buildguidelineFormFields(
       BuildContext context, AppLocalizations localizations) {
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AppTextField(
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      AppTextField(
           controller: _titleController,
           label: localizations.productTitle,
           icon: AppConstants.titleIcon,
           enabled: !_isSaving,
           textInputAction: TextInputAction.next,
           validator: (v) => InputValidator.validateGenericRequiredField(
-            localizations: localizations,
-            value: v,
-            emptyErrorMessageProvider: () => localizations.pleaseEnterTitle,
-          ),
-        ),
-        const SizedBox(height: AppConstants.defaultPadding),
-        AppTextField(
+              localizations: localizations,
+              value: v,
+              emptyErrorMessageProvider: () => localizations.pleaseEnterTitle)),
+      const SizedBox(height: AppConstants.defaultPadding),
+      AppTextField(
           controller: _descriptionController,
           label: localizations.description,
           icon: AppConstants.descriptionIcon,
           enabled: !_isSaving,
           textInputAction: TextInputAction.next,
-          maxLines: 3,
-        ),
-        const SizedBox(height: AppConstants.defaultPadding),
-        CropSelectionDropdown(
-          initialValue: _selectedCropId,
-          enabled: !_isSaving,
-          onChanged: (value) {
-            if (!_isSaving) setState(() => _selectedCropId = value);
-          },
-          validator: (v) => v == null ? localizations.pleaseSelectCrop : null,
-        ),
-      ],
-    );
+          maxLines: 3),
+      const SizedBox(height: AppConstants.defaultPadding),
+   
+      CropSelectionDropdown(
+        initialValue: _selectedCropId,
+        enabled: !_isSaving,
+        onChanged: (value) {
+          if (!_isSaving) setState(() => _selectedCropId = value);
+        },
+        validator: (v) => v == null ? localizations.pleaseSelectCrop : null,
+      ),
+    ]);
   }
 }
